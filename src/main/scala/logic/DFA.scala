@@ -11,9 +11,6 @@ trait DFA {
   def start: String
   def accepting: Set[String]
 
-  require(accepting subsetOf states)
-  require(states contains start)
-
   /* This is unused elsewhere, but exists for completeness' sake.
    * It is extremely similar to scanOne in simplifiedMaximalMunch below, except it runs until
    * input is exhausted in all cases.
