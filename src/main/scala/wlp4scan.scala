@@ -165,13 +165,13 @@ object WLP4Scan {
         Token("WHILE", "while")
       case Token("ID", "println")                                                        =>
         Token("PRINTLN", "println")
-      case Token("ID", "new")                                                        =>
+      case Token("ID", "new")                                                            =>
         Token("NEW", "new")
-      case Token("ID", "delete")                                                        =>
+      case Token("ID", "delete")                                                         =>
         Token("DELETE", "delete")
-      case Token("ID", "NULL")                                                        =>
+      case Token("ID", "NULL")                                                           =>
         Token("NULL", "NULL")
-      case Token("ZERO", "0")                                                        =>
+      case Token("ZERO", "0")                                                            =>
         Token("NUM", "0")
       case t                                                                             =>
         t
