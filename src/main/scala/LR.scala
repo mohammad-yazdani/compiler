@@ -7,6 +7,20 @@ object LR {
 
   }
 
+  class Stack {
+    private var stack: Seq[String] = Seq.empty
+
+    def push(item: String): Unit = {
+      this.stack.+:(item)
+    }
+
+    def pop(): String = {
+      val temp = stack.head
+      stack = stack.tail
+      temp
+    }
+  }
+
   val cfgrl = new CFGRL()
 
   val terminals: Set[String] = cfgrl.terminals
@@ -17,19 +31,10 @@ object LR {
 
   val unread: Iterator[String] = cfgrl.input
   var ahead: String = _
-  var stack: Seq[String] = Seq.empty
+  var symbolStack: Stack = new Stack()
+  var stateStack: Stack = new Stack()
 
   val predictTable: Map[Map[String, String], String] = Map.empty
-
-  def push(item: String): Unit = {
-    this.stack.+:(item)
-  }
-
-  def pop(): String = {
-    val temp: String = this.stack.head
-    this.stack = this.stack.tail
-    temp
-  }
 
   def read(): String = {
     if (this.ahead != null) {
@@ -47,8 +52,7 @@ object LR {
   }
 
   def doMatch(): Boolean = {
-    if (this.read() != this.pop()) return false
-    true
+    _
   }
 
   def empty(nonTerm: String): Boolean = {
@@ -68,5 +72,10 @@ object LR {
     _
   }
 
-
+  def main(args: Array[String]): Unit = {
+    this.symbolStack.push("BOF")
+    while (true) {
+      this.symbolStack.push(this.unread.next())
+    }
+  }
 }
