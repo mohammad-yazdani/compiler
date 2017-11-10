@@ -172,43 +172,57 @@ object LR {
     this.ahead
   }
 
-  def follow(sym: String, term: String): Boolean = {
+  def recur(lhs: String, sym: String, term: String, carry: String): Int = {
+    var result: Int = 0
+    var rules: Set[Transition] = Set.empty
+    this.transitions.foreach(trans => {
+      if (trans.LHS == lhs) {
+        println(trans.view)
+        rules += trans
+      }
+    })
+    for (trans <- rules) {
+      var newCarry: String = carry
+      var restNonTerms: Set[String] = Set.empty
+      trans.RHS.foreach(elem => {
+        if (nonTerminals.contains(elem)) restNonTerms += elem
+      })
 
-    def recur(lhs: String, sym: String, term: String, carry: String): Int = {
-      var result: Int = 0
+      if (carry != null) {
+        if (trans.RHS.head == carry)
+          result += 1
+        else if (this.nonTerminals.contains(trans.RHS.head)) {
+          result += recur(trans.RHS.head, sym, term, carry = carry)
+          restNonTerms -= trans.RHS.head
+        }
+        else {
+          newCarry = null
+        }
+      }
 
-      this.transitions.find(trans => trans.LHS == lhs)
-        .foreach(trans => {
-          var newCarry: String = carry
-          var restNonTerms: Set[String] = trans.RHS.find(tok => this.nonTerminals.contains(tok)).toSet
-          if (carry != null) {
-            if (trans.RHS.head == carry) result += 1
-            else if (this.nonTerminals.contains(trans.RHS.head)) {
-              result += recur(trans.RHS.head, sym, term, carry = carry)
-              restNonTerms -= trans.RHS.head
-            }
-            else {
-              newCarry = null
-            }
-          }
+      println(rules)
+      if (trans.LHS == sym && trans.RHS.head == term)
+        result += 1
 
-          if (trans.RHS.contains(sym) && trans.RHS.contains(term)) {
-            if (trans.RHS.indexOf(sym) == (trans.RHS.indexOf(term) - 1)) result += 1
-          }
+      if (trans.RHS.contains(sym) && trans.RHS.contains(term)) {
+        if (trans.RHS.indexOf(sym) == (trans.RHS.indexOf(term) - 1))
+          result += 1
+      }
 
-          if (trans.RHS.contains(term)) {
-            val beforeTerm: String = trans.RHS(trans.RHS.indexOf(term) - 1)
-            if (this.nonTerminals.contains(beforeTerm)) {
-              result += recur(beforeTerm, sym, term, carry = sym)
-              restNonTerms -= beforeTerm
-            }
-          }
-
-          restNonTerms.foreach(tok => result += recur(tok, sym, term, newCarry))
-        })
-      result
+      if (trans.RHS.contains(term)) {
+        val beforeTerm: String = trans.RHS(trans.RHS.indexOf(term) - 1)
+        if (this.nonTerminals.contains(beforeTerm)) {
+          result += recur(beforeTerm, sym, term, carry = sym)
+          restNonTerms -= beforeTerm
+        }
+      }
+      println("der")
+      restNonTerms.foreach(tok => result += recur(tok, sym, term, newCarry))
     }
+    result
+  }
 
+  def follow(sym: String, term: String): Boolean = {
     val search: Int = recur(this.start, sym, term, null)
     search > 0
   }
