@@ -63,6 +63,10 @@ object LR {
   class Stack[A] {
     var stack: Seq[A] = Seq.empty
 
+    def clear(): Unit = {
+      this.stack = Seq.empty
+    }
+
     def push(item: A): Unit = {
       this.stack = this.stack.+:(item)
     }
@@ -129,6 +133,12 @@ object LR {
 
   var stateStack: Stack[Int] = new Stack[Int]
 
+  var output: Stack[String] = new Stack[String]
+  var position: Int = _
+  var haveRead: Int = 0
+
+  var inputCarry: Boolean = false
+
   def fillStates(count: Int): Unit = {
     for (_ <- 0 until count) {
       val raw: Seq[String] = read().split(" +").toSeq
@@ -159,25 +169,39 @@ object LR {
   }
 
   def readTok(): String = {
-    if (!this.words.hasNext) return null
+    if (!this.unread.hasNext && !this.words.hasNext) {
+      return null
+    }
     if (this.ahead != null) {
       val temp: String = this.ahead
       this.ahead = null
       temp
-    } else this.words.next()
+    } else {
+      this.haveRead += 1
+      if (!this.words.hasNext) {
+        val in: String = read()
+        val raw: Seq[String] = in.split(" +").filter(sym => sym != "").toSeq
+        this.words = raw.toIterator
+        this.inputCarry = true
+      }
+      this.words.next()
+    }
   }
 
   def lookAhead(): String = {
-    this.ahead = readTok()
+    val temp: String = readTok()
+    if (temp != null) this.ahead = temp
     this.ahead
   }
 
-  def recur(lhs: String, sym: String, term: String, carry: String): Int = {
+  def recur(lhs: String, sym: String, term: String, carry: String, visited: Set[String]): Int = {
     var result: Int = 0
+    var newVisited: Set[String] = visited
+    if (newVisited.contains(lhs)) return 0
+    else newVisited += lhs
     var rules: Set[Transition] = Set.empty
     this.transitions.foreach(trans => {
       if (trans.LHS == lhs) {
-        println(trans.view)
         rules += trans
       }
     })
@@ -192,7 +216,7 @@ object LR {
         if (trans.RHS.head == carry)
           result += 1
         else if (this.nonTerminals.contains(trans.RHS.head)) {
-          result += recur(trans.RHS.head, sym, term, carry = carry)
+          result += recur(trans.RHS.head, sym, term, carry = carry, visited = newVisited)
           restNonTerms -= trans.RHS.head
         }
         else {
@@ -200,7 +224,6 @@ object LR {
         }
       }
 
-      println(rules)
       if (trans.LHS == sym && trans.RHS.head == term)
         result += 1
 
@@ -209,22 +232,29 @@ object LR {
           result += 1
       }
 
-      if (trans.RHS.contains(term)) {
+      if (trans.RHS.contains(term) && trans.RHS.head != term) {
         val beforeTerm: String = trans.RHS(trans.RHS.indexOf(term) - 1)
         if (this.nonTerminals.contains(beforeTerm)) {
-          result += recur(beforeTerm, sym, term, carry = sym)
+          result += recur(beforeTerm, sym, term, carry = sym, visited = newVisited)
           restNonTerms -= beforeTerm
         }
       }
-      println("der")
-      restNonTerms.foreach(tok => result += recur(tok, sym, term, newCarry))
+
+      restNonTerms.foreach(tok => result += recur(tok, sym, term, newCarry, visited = newVisited))
     }
     result
   }
 
   def follow(sym: String, term: String): Boolean = {
-    val search: Int = recur(this.start, sym, term, null)
+    val search: Int = recur(this.start, sym, term, null, Set.empty)
     search > 0
+  }
+
+  def reduceCheck(state: Int, sym: String): Boolean = {
+    if (this.states(state).rules.contains(sym)) {
+      if (this.states(state).rules(sym)._1.name == "reduce") true
+      else false
+    } else false
   }
 
   def shift(sym: String, in: Int): Unit = {
@@ -233,25 +263,38 @@ object LR {
   }
 
   def reduce(sym: String, in: Int): Unit = {
-    val poppedRaw: String = symbolStack.pop()
-    val popped: Seq[String] = poppedRaw.split(" +").toSeq
+    var popped: Seq[String] = Seq.empty
+    for (_ <- this.transitions(in).RHS.indices) {
+      val justPopped: String = symbolStack.pop()
+      popped = popped.+:(justPopped)
+    }
     if (this.transitions(in).RHS == popped) {
       val lhs: String = this.transitions(in.toInt).LHS
+      this.output.push(this.transitions(in.toInt).view)
+      for (_ <- popped.indices) this.stateStack.pop()
+      this.states(stateStack.top()).move(lhs)
 
-      val next: String = this.lookAhead()
+      /*val next: String = this.lookAhead()
       val reducible: Boolean = this.follow(lhs, next)
       if (reducible) {
-        symbolStack.push(lhs)
-        for (_ <- popped.indices) this.stateStack.pop()
+
+
       }
       else {
         symbolStack.push(poppedRaw)
-        this.shift(sym, in)
-      }
+        this.shift(sym, stateStack.top())
+      }*/
     } else throw new Exception("Wrong reduce.")
   }
 
   def parse(): Boolean = {
+    if (this.symbolStack.stack.equals(this.transitions.head.RHS.reverse)) {
+      this.output.push(this.transitions.head.view)
+      this.symbolStack.clear()
+      this.stateStack.clear()
+      finish()
+      return false
+    }
     var curr: Int = 0
     try {
       curr = this.stateStack.top()
@@ -259,22 +302,32 @@ object LR {
       case _: Exception =>
     }
     try {
-      val in: String = this.readTok()
-      if (in == null) return false
-      this.states(curr).move(state = in)
-      true
+      if (this.reduceCheck(curr, lookAhead())) {
+        this.states(curr).move(lookAhead())
+        true
+      } else {
+        var in: String = this.readTok()
+        if (in == null) {
+          in = ahead
+        }
+        this.states(curr).move(state = in)
+        true
+      }
     } catch {
       case e: Exception =>
-        //error(pos)
         println(e.getMessage)
-        System.exit(1)
+        error()
         false
     }
   }
 
-  def error(at: Int): Unit = {
-    System.err.println("ERROR at " + at.toString)
-    System.exit(1)
+  def error(): Unit = {
+    System.err.println("ERROR at " + this.haveRead)
+  }
+
+  def finish(): Unit = {
+    this.output.stack.reverse.foreach(println)
+    this.output.clear()
   }
 
   def main(args: Array[String]): Unit = {
@@ -286,18 +339,18 @@ object LR {
         System.exit(1)
     }
     try {
-      var in: String = read()
-      var lastPos: Int = 0
-      while (in != null) {
-        var position: Int = 0
-        this.words = in.split(" +").toIterator
-        while (this.parse()) {
-          position += 1
+      while (this.unread.hasNext | this.inputCarry) {
+        val in: String = read()
+        this.inputCarry = false
+        if (in != "") {
+          this.position = 0
+          val raw: Seq[String] = in.split(" +").filter(sym => sym != "").toSeq
+          this.words = raw.toIterator
+          while (this.parse()) {
+            this.position += 1
+          }
         }
-        in = read()
-        lastPos = position
       }
-      if (stateStack.stack.nonEmpty) error(lastPos)
     } catch {
       case _: NoSuchElementException =>
       case e: Exception =>
