@@ -4,7 +4,10 @@
       <w>cfgrl</w>
       <w>harrap</w>
       <w>nonterminals</w>
+      <w>nvalue</w>
+      <w>nview</w>
       <w>preorder</w>
+      <w>rparen</w>
     </words>
   </dictionary>
 </component>

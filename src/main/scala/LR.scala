@@ -273,17 +273,6 @@ object LR {
       this.output.push(this.transitions(in.toInt).view)
       for (_ <- popped.indices) this.stateStack.pop()
       this.states(stateStack.top()).move(lhs)
-
-      /*val next: String = this.lookAhead()
-      val reducible: Boolean = this.follow(lhs, next)
-      if (reducible) {
-
-
-      }
-      else {
-        symbolStack.push(poppedRaw)
-        this.shift(sym, stateStack.top())
-      }*/
     } else throw new Exception("Wrong reduce.")
   }
 

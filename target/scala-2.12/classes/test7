@@ -48,4 +48,10 @@ term ( expr )
 6 expr shift 10
 BOF id - ( id ) - id EOF
 BOF id -
+
+
+
+
+
+dbdfb
 ( id ) - id EOF
