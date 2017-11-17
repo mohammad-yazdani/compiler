@@ -435,9 +435,13 @@ object WLP4Gen {
           else this.buildSymbolTable(child, procedure)
         })
       case "factor" | "lvalue" =>
-        if (node.children.head.value == "ID") {
+        if (node.children.head.value == "ID" && node.children.length < 2) {
           val id: String = this.readTerms("ID").pop()
-          if (!scope.broadcast(id)) throw new Exception("Undeclared variable " + id)
+          if (!scope.emit(id)) throw new Exception("Undeclared variable " + id)
+        } else if (node.children.head.value == "ID") {
+          val id: String = this.readTerms("ID").pop()
+          if (scope.emit(id)) throw new Exception(id + " is not a function.")
+          if (!scope.broadcast(id)) throw new Exception("Undeclared function " + id)
         }
         node.children.foreach(child => this.buildSymbolTable(child, scope))
       case _ =>
@@ -449,6 +453,7 @@ object WLP4Gen {
     this.unread = Iterator("BOF BOF")
     this.unread = this.unread.++(io.Source.stdin.getLines())
     this.unread = this.unread.++(Iterator("EOF EOF"))
+
     try {
       this.fillStates(this.stateCount)
     } catch {
