@@ -120,15 +120,29 @@ object WLP4Gen {
   class Symbol(var kind: String, var name: String) {
     var scope: Seq[Symbol] = Seq.empty
 
+    private var parent: Symbol = _
     this.name = name
     this.kind = kind
 
     def add(sym: Symbol): Unit = {
+      sym.setParent(this)
       this.scope = this.scope :+ sym
     }
 
-    def exists(id: String): Boolean = {
+    def setParent(par: Symbol): Unit = {
+      this.parent = par
+    }
+
+    def emit(id: String): Boolean = {
       this.scope.exists(sym => sym.name == id)
+    }
+
+    def broadcast(id: String): Boolean = {
+      if (!this.emit(id)) {
+        if (this.parent != null) this.parent.broadcast(id)
+        else false
+      }
+      else true
     }
 
     def print(): Unit = {
@@ -138,15 +152,25 @@ object WLP4Gen {
   }
 
   class Procedure(name: String, kind: String = "INT") extends Symbol(kind, name) {
-    var params: Seq[Symbol] = Seq.empty
+    var params: Symbol = new Symbol(null, null)
 
     def addToParams(param: Symbol): Unit = {
-      this.params = this.params :+ param
+      this.params.add(param)
     }
 
     override def print(): Unit = {
-      System.err.println(this.name)
+      System.err.print(this.name)
+      this.params.scope.foreach(sym => {
+        System.err.print(" " + sym.kind)
+      })
+      System.err.println()
+      this.params.scope.foreach(sym => sym.print())
       this.scope.foreach(sym => sym.print())
+    }
+
+    override def emit(id: String): Boolean = {
+      this.scope.exists(sym => sym.name == id) ||
+      this.params.scope.exists(sym => sym.name == id)
     }
   }
 
@@ -154,11 +178,21 @@ object WLP4Gen {
     private var table: Seq[Symbol] = Seq.empty
 
     override def add(sym: Symbol): Unit = {
+      sym.setParent(this)
       table = table :+ sym
     }
 
+    override def emit(id: String): Boolean = {
+      this.table.exists(sym => sym.name == id)
+    }
+
     override def print(): Unit = {
-      this.table.foreach(sym => sym.print())
+      this.table.foreach(sym => {
+        sym.print()
+        System.err.println()
+      })
+      /*val wain: Symbol = this.table.find(sym => sym.name == "wain").toSeq.head
+      wain.print()*/
     }
   }
 
@@ -381,25 +415,33 @@ object WLP4Gen {
         val kindRaw: Seq[String] = node.children.head.children.map(child => child.value)
         val kind: String = this.typeResolve(kindRaw)
         val id: String = this.readTerms("ID").pop()
-        if (scope.exists(id)) throw new Exception("Duplicate declaration of variable " + id)
+        if (scope.emit(id)) throw new Exception("Duplicate declaration of variable " + id)
         scope.add(new Symbol(kind = kind, name = id))
       case "procedure" =>
         val id: String =  this.readTerms("ID").pop()
-        if (scope.exists(id)) throw new Exception("Duplicate declaration of function " + id)
+        if (scope.emit(id)) throw new Exception("Duplicate declaration of function " + id)
         val procedure: Procedure = new Procedure(id)
-        node.children.foreach(child => this.buildSymbolTable(child, procedure))
         scope.add(procedure)
+        node.children.foreach(child => {
+          if (child.value == "params") this.buildSymbolTable(child, procedure.params)
+          else this.buildSymbolTable(child, procedure)
+        })
       case "main" =>
-        if (scope.exists("wain")) throw new Exception("Duplicate declaration of wain")
+        if (scope.emit("wain")) throw new Exception("Duplicate declaration of wain")
         val procedure: Procedure = new Procedure("wain")
-        node.children.foreach(child => this.buildSymbolTable(child, procedure))
         scope.add(procedure)
+        node.children.foreach(child => {
+          if (child.value == "dcl") this.buildSymbolTable(child, procedure.params)
+          else this.buildSymbolTable(child, procedure)
+        })
       case "factor" | "lvalue" =>
         if (node.children.head.value == "ID") {
           val id: String = this.readTerms("ID").pop()
-          if (!scope.exists(id)) throw new Exception("Undeclared variable " + id)
+          if (!scope.broadcast(id)) throw new Exception("Undeclared variable " + id)
         }
-      case _ => node.children.foreach(child => this.buildSymbolTable(child, scope))
+        node.children.foreach(child => this.buildSymbolTable(child, scope))
+      case _ =>
+        node.children.foreach(child => this.buildSymbolTable(child, scope))
     }
   }
 
