@@ -1,4 +1,4 @@
-object WLP4Gen {
+object WLP4Gen1 {
 
   class Transition (rawProduction: String) {
     val view: String = rawProduction
@@ -75,8 +75,6 @@ object WLP4Gen {
     val value: String = nvalue
     val view: String = nview
 
-    var kind: String = _
-
     var children: Seq[Node[A]] = Seq.empty
 
     def addChild(child: Node[A]): Unit = {
@@ -113,7 +111,7 @@ object WLP4Gen {
     }
 
     def symPrint(carry: String = ""): Unit = {
-      println(carry + this.value + "[" + this.kind + "]")
+      println(carry + this.value)
       this.children.foreach(child => child.symPrint(carry + "--"))
     }
   }
@@ -132,9 +130,7 @@ object WLP4Gen {
     }
 
     def getType(id: String): String = {
-      if (emit(id)) this.scope.find(sym => sym.name == id).toSeq.head.kind
-      else if (this.name == id) this.kind
-      else null
+      this.scope.find(sym => sym.name == id).toSeq.head.kind
     }
 
     def setParent(par: Symbol): Unit = {
@@ -166,17 +162,6 @@ object WLP4Gen {
       this.params.add(param)
     }
 
-    override def getType(id: String): String = {
-      if (emit(id)) {
-        if (this.params.emit(id))
-          this.params.scope.find(sym => sym.name == id).toSeq.head.kind
-        else
-          this.scope.find(sym => sym.name == id).toSeq.head.kind
-      }
-      else if (this.name == id) this.kind
-      else null
-    }
-
     override def print(): Unit = {
       System.err.print(this.name)
       this.params.scope.foreach(sym => {
@@ -199,7 +184,6 @@ object WLP4Gen {
     override def add(sym: Symbol): Unit = {
       sym.setParent(this)
       table = table :+ sym
-      scope = scope :+ sym
     }
 
     override def emit(id: String): Boolean = {
@@ -402,6 +386,13 @@ object WLP4Gen {
     this.output.clear()
   }
 
+  def fillSymbolTable(): Unit = {
+    this.readTerms.foreach(stack => stack._2.reverse())
+    val root: Node[String] = this.genTree("start")
+    this.buildSymbolTable(root, this.symbolTable)
+    //root.symPrint()
+  }
+
   def genTree(root: String): Node[String] = {
     val curr: Transition = this.output.pop()
     val currNode: Node[String] = new Node[String](curr.LHS, curr.view)
@@ -418,8 +409,8 @@ object WLP4Gen {
 
   def typeResolve(kind: Seq[String]): String = {
     kind match {
-      case Seq("INT") => "INT"
-      case Seq("INT", "STAR") => "INT STAR"
+      case Seq("INT") => "int"
+      case Seq("INT", "STAR") => "int*"
       case t => throw new Exception("Invalid type " + t)
     }
   }
@@ -431,12 +422,12 @@ object WLP4Gen {
         val kind: String = this.typeResolve(kindRaw)
         val id: String = this.readTerms("ID").pop()
 
-        if (!this.readTermsTemp.contains("ID")) {
+        if (!this.readTerms.contains("ID")) {
           val newStack: Stack[String] = new Stack[String]
           newStack.push(id)
-          this.readTermsTemp += ("ID" -> newStack)
+          this.readTerms += ("ID" -> newStack)
         } else {
-          this.readTermsTemp("ID").push(id)
+          this.readTerms("ID").push(id)
         }
 
         if (scope.emit(id)) throw new Exception("Duplicate declaration of variable " + id)
@@ -444,12 +435,12 @@ object WLP4Gen {
       case "procedure" =>
         val id: String =  this.readTerms("ID").pop()
 
-        if (!this.readTermsTemp.contains("ID")) {
+        if (!this.readTerms.contains("ID")) {
           val newStack: Stack[String] = new Stack[String]
           newStack.push(id)
-          this.readTermsTemp += ("ID" -> newStack)
+          this.readTerms += ("ID" -> newStack)
         } else {
-          this.readTermsTemp("ID").push(id)
+          this.readTerms("ID").push(id)
         }
 
         if (scope.emit(id)) throw new Exception("Duplicate declaration of function " + id)
@@ -471,24 +462,24 @@ object WLP4Gen {
         if (node.children.head.value == "ID" && node.children.length < 2) {
           val id: String = this.readTerms("ID").pop()
 
-          if (!this.readTermsTemp.contains("ID")) {
+          if (!this.readTerms.contains("ID")) {
             val newStack: Stack[String] = new Stack[String]
             newStack.push(id)
-            this.readTermsTemp += ("ID" -> newStack)
+            this.readTerms += ("ID" -> newStack)
           } else {
-            this.readTermsTemp("ID").push(id)
+            this.readTerms("ID").push(id)
           }
 
           if (!scope.emit(id)) throw new Exception("Undeclared variable " + id)
         } else if (node.children.head.value == "ID") {
           val id: String = this.readTerms("ID").pop()
 
-          if (!this.readTermsTemp.contains("ID")) {
+          if (!this.readTerms.contains("ID")) {
             val newStack: Stack[String] = new Stack[String]
             newStack.push(id)
-            this.readTermsTemp += ("ID" -> newStack)
+            this.readTerms += ("ID" -> newStack)
           } else {
-            this.readTermsTemp("ID").push(id)
+            this.readTerms("ID").push(id)
           }
 
           if (scope.emit(id)) throw new Exception(id + " is not a function.")
@@ -508,116 +499,11 @@ object WLP4Gen {
           valid = valid && checkType(scope, child, against)
         })
         return valid
-      case "ID" =>
-        val id: String = this.readTerms("ID").pop()
-        val result: Boolean = scope.getType(id) == against
-        if (!result) throw new Exception(id + " has to have type " + against + ".")
-        return result
-      case "NUM" =>
-        val result: Boolean = "NUM" == against
-        if (!result) throw new Exception("Type mismatch: NUM and " + against + ".")
-        return result
-      case "NULL" =>
-        val result: Boolean = "INT STAR" == against
-        if (!result) throw new Exception("Type mismatch: INT STAR and " + against + ".")
-        return result
+      case "ID" => return scope.getType(this.readTerms("ID").pop()) == against
+      case "NUM" => return "NUM" == against
+      case "NULL" => return "INT STAR" == against
     }
     true
-  }
-
-  def augmentTree(root: Node[String], inScope: Symbol): Node[String] = {
-    var scope: Symbol = inScope
-    if (root.value == "procedure") scope = inScope.scope
-      .find(sym => sym.name == this.readTerms("ID").top()).toSeq.head
-    root.children.foreach(child => {
-      if (root.kind == null) {
-        root.kind = augmentTree(child, scope).kind
-      } else {
-        val childKind: String = augmentTree(child, scope).kind
-        root.kind match {
-          case "PLUS STAR" => if (childKind == "INT STAR")
-            throw new Exception("Cannot add two pointers.")
-            else {
-            root.kind = "INT STAR"
-            return root
-          }
-          case "PLUS INT" => if (childKind == "INT STAR") {
-            root.kind = "INT STAR"
-            return root
-          }
-          case "MINUS STAR" =>
-            if (childKind == "INT STAR") {
-              root.kind = "INT"
-              return root
-            } else {
-              root.kind = "INT STAR"
-              return root
-            }
-          case "MINUS INT" =>
-            if (childKind == "INT STAR") {
-              throw new Exception("Cannot subtract pointer from int.")
-            } else {
-              root.kind = "INT"
-              return root
-            }
-          case "ACT INT" =>
-            if (childKind == "INT STAR") {
-              throw new Exception("Cannot div, mult, pct pointer.")
-            } else {
-              root.kind = "INT"
-              return root
-            }
-        }
-        if (childKind != null && root.kind != childKind && root.value != "paramlist")
-          root.kind = childKind match {
-            case "STAR" => "INT"
-            case "NO STAR" =>
-              if (root.value == "type") "INT STAR"
-              else "INT"
-            case "PLUS" =>
-              if (root.kind == "INT STAR") "PLUS STAR"
-              else "PLUS INT"
-            case "MINUS" =>
-              if (root.kind == "INT STAR") "MINUS STAR"
-              else "MINUS INT"
-            case "SLASH" | "PCT" =>
-              if (root.kind == "INT STAR") throw new Exception("Cannot div, mult, pct " +
-                "pointer.")
-              else "AC INT"
-            case _ =>
-              throw new Exception("Type mismatch "
-                + root.kind + " and " + childKind + ".")
-          }
-      }
-    })
-    root.value match {
-      case "INT" => root.kind = "INT"
-      case "INT STAR" => root.kind = "INT STAR"
-      case "ID" =>
-        val id: String = this.readTerms("ID").pop()
-        root.kind = scope.getType(id)
-      case "NUM" => root.kind = "INT"
-      case "NULL" => root.kind = "INT STAR"
-      case "AMP" | "NEW" =>
-        root.kind = "STAR"
-      case "STAR" => root.kind = "NO STAR"
-      case "PLUS" => root.kind = "PLUS"
-      case "MINUS" => root.kind = "MINUS"
-      case "SLASH" => root.kind = "SLASH"
-      case "PCT" => root.kind = "PCT"
-      case _ =>
-    }
-    root
-  }
-
-  def fillSymbolTable(): Unit = {
-    this.readTerms.foreach(stack => stack._2.reverse())
-    var root: Node[String] = this.genTree("start")
-    this.buildSymbolTable(root, this.symbolTable)
-    this.readTerms = this.readTermsTemp
-    this.readTerms.foreach(item => item._2.reverse())
-    root = this.augmentTree(root, this.symbolTable)
-    //root.symPrint()
   }
 
   def wlp4parse(): Unit = {
@@ -653,7 +539,7 @@ object WLP4Gen {
   }
 
   def wlp4gen(): Unit = {
-    //try {
+    try {
       while (this.unread.hasNext) {
         val in: String = this.fullRead()
         if (this.nonTerminals.contains(in.split(" +").toSeq.head)) {
@@ -662,12 +548,13 @@ object WLP4Gen {
         }
       }
       this.fillSymbolTable()
-      //this.symbolTable.print()
-    /*} catch {
+      //this.readTerms = this.readTermsTemp
+      this.symbolTable.print()
+    } catch {
       case _: NoSuchElementException =>
       case e: Exception =>
         System.err.println("[ERROR] " + e.getMessage)
-    }*/
+    }
   }
 
   def main(args: Array[String]): Unit = {
