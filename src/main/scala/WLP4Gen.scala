@@ -567,6 +567,7 @@ object WLP4Gen {
               root.kind = "INT"
               return root
             }
+          case _ =>
         }
         if (childKind != null && root.kind != childKind && root.value != "paramlist")
           root.kind = childKind match {
