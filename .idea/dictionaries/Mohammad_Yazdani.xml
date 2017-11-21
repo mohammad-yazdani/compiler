@@ -2,11 +2,17 @@
   <dictionary name="Mohammad Yazdani">
     <words>
       <w>cfgrl</w>
+      <w>dcls</w>
       <w>harrap</w>
+      <w>lbrace</w>
+      <w>lbrack</w>
+      <w>lparen</w>
       <w>nonterminals</w>
       <w>nvalue</w>
       <w>nview</w>
       <w>preorder</w>
+      <w>rbrace</w>
+      <w>rbrack</w>
       <w>rparen</w>
     </words>
   </dictionary>

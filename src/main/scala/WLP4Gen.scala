@@ -525,100 +525,191 @@ object WLP4Gen {
     true
   }
 
-  def augmentTree(root: Node[String], inScope: Symbol): Node[String] = {
-    var scope: Symbol = inScope
-    if (root.value == "procedure") scope = inScope.scope
-      .find(sym => sym.name == this.readTerms("ID").top()).toSeq.head
-    root.children.foreach(child => {
-      if (root.kind == null) {
-        root.kind = augmentTree(child, scope).kind
-      } else {
-        val childKind: String = augmentTree(child, scope).kind
-        root.kind match {
-          case "PLUS STAR" => if (childKind == "INT STAR")
-            throw new Exception("Cannot add two pointers.")
-            else {
-            root.kind = "INT STAR"
-            return root
-          }
-          case "PLUS INT" => if (childKind == "INT STAR") {
-            root.kind = "INT STAR"
-            return root
-          }
-          case "MINUS STAR" =>
-            if (childKind == "INT STAR") {
-              root.kind = "INT"
-              return root
-            } else {
-              root.kind = "INT STAR"
-              return root
-            }
-          case "MINUS INT" =>
-            if (childKind == "INT STAR") {
-              throw new Exception("Cannot subtract pointer from int.")
-            } else {
-              root.kind = "INT"
-              return root
-            }
-          case "ACT INT" =>
-            if (childKind == "INT STAR") {
-              throw new Exception("Cannot div, mult, pct pointer.")
-            } else {
-              root.kind = "INT"
-              return root
-            }
-          case _ =>
-        }
-        if (childKind != null && root.kind != childKind && root.value != "paramlist")
-          root.kind = childKind match {
-            case "STAR" => "INT"
-            case "NO STAR" =>
-              if (root.value == "type") "INT STAR"
-              else "INT"
-            case "PLUS" =>
-              if (root.kind == "INT STAR") "PLUS STAR"
-              else "PLUS INT"
-            case "MINUS" =>
-              if (root.kind == "INT STAR") "MINUS STAR"
-              else "MINUS INT"
-            case "SLASH" | "PCT" =>
-              if (root.kind == "INT STAR") throw new Exception("Cannot div, mult, pct " +
-                "pointer.")
-              else "AC INT"
-            case _ =>
-              throw new Exception("Type mismatch "
-                + root.kind + " and " + childKind + ".")
-          }
-      }
-    })
+  def handleArgs(function: Procedure, arglist: Node[String]): Unit = {
+    var argStack: Stack[String] = new Stack[String]
+    argStack = this.handleArgList(function, arglist, argStack)
+    for (param <- function.params.scope) {
+      val actualKind: String = argStack.pop()
+      if (argStack.stack.isEmpty) throw new Exception("Too few arguments to function " + function.name)
+      if (param.kind != actualKind) throw new Exception("Parameter " + param.name +
+        " of function " + function.name + " cannot take type " + actualKind)
+    }
+    if (argStack.stack.nonEmpty) throw new Exception("Too many arguments to function " + function.name)
+  }
+
+  def handleArgList(scope: Procedure, root: Node[String], stack: Stack[String]): Stack[String] = {
     root.value match {
-      case "INT" => root.kind = "INT"
-      case "INT STAR" => root.kind = "INT STAR"
+      case "NUM" =>
+        stack.push("INT")
+        stack
+      case "NULL" =>
+        stack.push("INT STAR")
+        stack
       case "ID" =>
         val id: String = this.readTerms("ID").pop()
-        root.kind = scope.getType(id)
-      case "NUM" => root.kind = "INT"
-      case "NULL" => root.kind = "INT STAR"
-      case "AMP" | "NEW" =>
-        root.kind = "STAR"
-      case "STAR" => root.kind = "NO STAR"
-      case "PLUS" => root.kind = "PLUS"
-      case "MINUS" => root.kind = "MINUS"
-      case "SLASH" => root.kind = "SLASH"
-      case "PCT" => root.kind = "PCT"
-      case _ =>
+        stack.push(scope.getType(id))
+        stack
+      case _ => throw new Exception("Function does not accept param " + root.value)
+    }
+  }
+
+
+  def handleExpr(root: Node[String], scope: Symbol): Node[String] = {
+    root.kind = root.value match {
+      case "INT" => "INT"
+      case "INT STAR" => "INT STAR"
+      case "ID" =>
+        val id: String = this.readTerms("ID").pop()
+        if (this.symbolTable.scope.exists(sym => sym.name == id)) {
+          this.readTerms("ID").push(id)
+        }
+        scope.getType(id)
+      case "NUM" => "INT"
+      case "NULL" => "INT STAR"
+      case "AMP" => "INT STAR"
+      case "DELETE" => "DELETE ["
+      case "NEW" => "NEW"
+      case "PRINTLN" => "PRINTLN"
+      case "PLUS" => "PLUS"
+      case "MINUS" => "MINUS"
+      case "STAR" => "STAR"
+      case "SLASH" | "PCT" => "SLASH"
+      case "NE" | "LE" | "GT" | "LE" | "GE" => "COMP"
+      case "arglist" =>
+        val functionSymbol: Symbol = scope.scope
+          .find(sym => sym.name == this.readTerms("ID").pop()).toSeq.head
+        if (!scope.isInstanceOf[Procedure]) throw new Exception(functionSymbol.name + " is not a function.")
+        else {
+          this.handleArgs(functionSymbol.asInstanceOf[Procedure], root)
+        }
+        root.kind
+      case _ => root.kind
+    }
+
+    for (child <- root.children) {
+      val childKind: String = handleExpr(child, scope).kind
+      if (root.kind == null)
+        root.kind = childKind
+      else {
+        root.kind match {
+          case "INT PLUS" =>
+            if (childKind == "INT") root.kind = "INT"
+            else if (childKind == "INT STAR") root.kind = "INT STAR"
+            else throw new Exception("Cannot add " + childKind)
+          case "STAR PLUS" =>
+            if (childKind == "INT STAR") throw new Exception("Cannot add pointers")
+            else if (childKind == "INT") root.kind = "INT STAR"
+            else throw new Exception("Cannot add " + childKind)
+          case "INT MINUS" =>
+            if (childKind == "INT") root.kind = "INT"
+            else throw new Exception("Cannot subtract pointer from int.")
+          case "STAR MINUS" =>
+            if (childKind == "INT") root.kind = "INT STAR"
+            else if (childKind == "INT STAR") root.kind = "INT"
+            else throw new Exception("Cannot subtract " + childKind + ".")
+          case "INT MULT" =>
+            if (childKind != "INT") throw new Exception("Cannot mult/div " + childKind + ".")
+            else root.kind = "INT"
+          case "INT COMP" =>
+            if (childKind != "INT") throw new Exception("Cannot compare int and " + childKind + ".")
+            else root.kind = "INT"
+          case "INT STAR COMP" =>
+            if (childKind != "INT STAR") throw new Exception("Cannot compare int* and " + childKind + ".")
+            else root.kind = "INT"
+          case "DELETE [" =>
+            if (child.value == "LBRACK") {
+              root.kind = "DELETE ]"
+            }
+          case "DELETE ]" =>
+            root.kind = "POINTER"
+          case "NEW" =>
+            if (child.value == "INT") {
+              root.kind = "NEW ["
+            }
+          case "NEW [" =>
+            if (childKind == "INT") {
+              root.kind = "INT STAR"
+            } else throw new Exception("Size of array cannot be " + childKind + ".")
+          case "PRINTLN" =>
+            if (childKind == "INT") root.kind = null
+            else throw new Exception("Cannot print " + childKind)
+          case "POINTER" =>
+            if (childKind == "INT STAR") {
+              root.kind = null
+            }
+            else throw new Exception("Cannot delete " + childKind)
+          case _ =>
+            root.kind = childKind match {
+              case "PLUS" =>
+                val newKind: String = root.kind match {
+                  case "INT" => "INT PLUS"
+                  case "INT STAR" => "STAR PLUS"
+                  case _ => throw new Exception("Cannot add " + root.kind)
+                }
+                newKind
+              case "MINUS" =>
+                val newKind: String = root.kind match {
+                  case "INT" => "INT MINUS"
+                  case "INT STAR" => "STAR MINUS"
+                  case _ => throw new Exception("Cannot subtract " + root.kind)
+                }
+                newKind
+              case "STAR" =>
+                val newKind: String = root.kind match {
+                  case "INT" => "INT MULT"
+                  case "INT STAR" => throw new Exception("Cannot multiply pointer")
+                  case _ =>
+                    if (root.kind == null) "INT"
+                    else throw new Exception("Cannot multiply " + root.kind)
+                }
+                newKind
+              case "SLASH" | "PCT" =>
+                val newKind: String = root.kind match {
+                  case "INT" => "INT MULT"
+                  case "INT STAR" => throw new Exception("Cannot divide pointer")
+                  case _ =>
+                    if (root.kind == null) "INT"
+                    else throw new Exception("Cannot multiply " + root.kind)
+                }
+                newKind
+              case "NE" | "LE" | "GT" | "LE" | "GE" =>
+                val newKind: String = root.kind match {
+                  case "INT" => "INT COMP"
+                  case "INT STAR" => "INT STAR COMP"
+                  case _ => throw new Exception("Cannot compare " + root.kind)
+                }
+                newKind
+            }
+        }
+      }
     }
     root
   }
 
-  def fillSymbolTable(): Unit = {
-    this.readTerms.foreach(stack => stack._2.reverse())
-    var root: Node[String] = this.genTree("start")
-    this.buildSymbolTable(root, this.symbolTable)
-    this.readTerms = this.readTermsTemp
-    this.readTerms.foreach(item => item._2.reverse())
-    root = this.augmentTree(root, this.symbolTable)
-    //root.symPrint()
+  def augmentTree(root: Node[String], inScope: Symbol): Node[String] = {
+    var scope: Symbol = inScope
+    root.value match {
+      case "procedure" =>
+        scope = inScope.scope
+          .find(sym => sym.name == this.readTerms("ID").pop()).toSeq.head
+      case "paramlist" =>
+        return root
+      case "arglist" =>
+        val functionSymbol: Symbol = scope.scope
+          .find(sym => sym.name == this.readTerms("ID").pop()).toSeq.head
+        if (!scope.isInstanceOf[Procedure]) throw new Exception(functionSymbol.name + " is not a function.")
+        else {
+          this.handleArgs(functionSymbol.asInstanceOf[Procedure], root)
+        }
+      case "expr" =>
+        return this.handleExpr(root, scope)
+      case _ =>
+    }
+
+    root.children.foreach(child => {
+      root.kind = this.augmentTree(child, scope).kind
+    })
+    root
   }
 
   def wlp4parse(): Unit = {
@@ -651,6 +742,16 @@ object WLP4Gen {
       case e: Exception =>
         System.err.println(e.getMessage)
     }
+  }
+
+  def fillSymbolTable(): Unit = {
+    this.readTerms.foreach(stack => stack._2.reverse())
+    var root: Node[String] = this.genTree("start")
+    this.buildSymbolTable(root, this.symbolTable)
+    this.readTerms = this.readTermsTemp
+    this.readTerms.foreach(item => item._2.reverse())
+    root = this.augmentTree(root, this.symbolTable)
+    //root.symPrint()
   }
 
   def wlp4gen(): Unit = {
