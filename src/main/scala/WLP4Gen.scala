@@ -230,7 +230,8 @@ object WLP4Gen {
   transitionsRaw.foreach(production => this.transitions = this.transitions.:+(new Transition(production)))
 
   //var unread: Iterator[String] = Iterator("BOF BOF")
-  var unread: Iterator[String] = io.Source.stdin.getLines()
+  //var unread: Iterator[String] = io.Source.stdin.getLines()
+  var unread: Iterator[String] = _
   //this.unread = this.unread.++(Iterator("EOF EOF"))
 
   var readTerms: Map[String, Stack[String]] = Map.empty
@@ -773,6 +774,8 @@ object WLP4Gen {
   }
 
   def main(args: Array[String]): Unit = {
+    if (args.isEmpty) this.unread = io.Source.stdin.getLines()
+    else this.unread = scala.io.Source.fromFile(args.head).getLines()
     this.wlp4gen()
   }
 }
