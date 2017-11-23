@@ -230,6 +230,8 @@ object WLP4Gen {
   val transitionsRaw: Seq[String] = Seq("start BOF procedures EOF", "procedures procedure procedures", "procedures main", "procedure INT ID LPAREN params RPAREN LBRACE dcls statements RETURN expr SEMI RBRACE", "main INT WAIN LPAREN dcl COMMA dcl RPAREN LBRACE dcls statements RETURN expr SEMI RBRACE", "params", "params paramlist", "paramlist dcl", "paramlist dcl COMMA paramlist", "type INT", "type INT STAR", "dcls", "dcls dcls dcl BECOMES NUM SEMI", "dcls dcls dcl BECOMES NULL SEMI", "dcl type ID", "statements", "statements statements statement", "statement lvalue BECOMES expr SEMI", "statement IF LPAREN test RPAREN LBRACE statements RBRACE ELSE LBRACE statements RBRACE", "statement WHILE LPAREN test RPAREN LBRACE statements RBRACE", "statement PRINTLN LPAREN expr RPAREN SEMI", "statement DELETE LBRACK RBRACK expr SEMI", "test expr EQ expr", "test expr NE expr", "test expr LT expr", "test expr LE expr", "test expr GE expr", "test expr GT expr", "expr term", "expr expr PLUS term", "expr expr MINUS term", "term factor", "term term STAR factor", "term term SLASH factor", "term term PCT factor", "factor ID", "factor NUM", "factor NULL", "factor LPAREN expr RPAREN", "factor AMP lvalue", "factor STAR factor", "factor NEW INT LBRACK expr RBRACK", "factor ID LPAREN RPAREN", "factor ID LPAREN arglist RPAREN", "arglist expr", "arglist expr COMMA arglist", "lvalue ID", "lvalue STAR factor", "lvalue LPAREN lvalue RPAREN")
   transitionsRaw.foreach(production => this.transitions = this.transitions.:+(new Transition(production)))
 
+  val types: Set[String] = Set("INT", "INT STAR", null)
+
   //var unread: Iterator[String] = Iterator("BOF BOF")
   //var unread: Iterator[String] = io.Source.stdin.getLines()
   var unread: Iterator[String] = _
@@ -550,17 +552,16 @@ object WLP4Gen {
       case ("INT STAR MINUS", "INT") =>  "INT STAR"
 
       case ("INT", "STAR" | "SLASH" | "PCT") => "MULT-DIV"
-      case ("INT", "MULT-DIV") => "INT"
+      case ("MULT-DIV", "INT") => "INT"
 
-      case (org, "EQ" | "NE" | "LT" | "GT" | "LE" | "GE") => org
-
-      case ("INT", "NEW") => "NEW INT"
+      case (null, "NEW") => "NEW INT"
       case ("NEW INT", "LBRACK") => "NEW INT ["
       case ("NEW INT [", "INT") => "NEW INT [INT"
-      case ("NEW INT [INT", "]") => "INT STAR"
+      case ("NEW INT [INT", "RBRACK") => "INT STAR"
 
       case (org, "LPAREN") => org
       case (org, "RPAREN") => org
+      case (org, "arglist") => org
 
       case _ => throw new Exception("Operation " + op + " cannot be applied to type " + kind + ".")
     }
@@ -619,12 +620,15 @@ object WLP4Gen {
 
     root.children.map(child => {
       if (child.value == "arglist") {
-        root.kind = this.handleArgs(child, functionScope).kind
-        return root
+        /*root.kind = this.handleArgs(child, functionScope).kind
+        return root*/
+        this.handleArgs(child, functionScope)
       }
       else this.handleExpr(child, scope)
     })
     if (root.children.nonEmpty) root.kind = this.resolveExpr(root.children.toIterator)
+    if (!this.types.contains(root.kind))
+      throw new Exception("Incomplete or wrong expression!")
     root
   }
 
@@ -636,23 +640,46 @@ object WLP4Gen {
 
   def handleDelete(root: Node[String], scope: Symbol): Node[String] = {
     val printType: String = this.handleExpr(root.children.find(child => child.value == "expr").head, scope).kind
-    if (printType != "INT STAR") throw new Exception("Cannot print " + printType + ".")
+    if (printType != "INT STAR") throw new Exception("Cannot delete " + printType + ".")
     root
   }
 
   def handleStatements(root: Node[String], scope: Symbol): Node[String] = {
-    if (root.children.nonEmpty) root.children.head.value match {
+    if (root.children.isEmpty) return root
+    root.children.head.value match {
       case "PRINTLN" => return this.handlePrint(root, scope)
       case "DELETE" => return this.handleDelete(root, scope)
       case _ =>
     }
 
+    if (root.children.head.value == "lvalue") {
+      val lvalueType: String = this.handleExpr(root.children.head, scope).kind
+      val exprType: String = this.handleExpr(root.children(2), scope).kind
+      if (lvalueType != exprType) throw new Exception("Cannot assign lvalue of type "
+      + lvalueType + " to expression of type " + exprType + ".")
+      return root
+    }
+
     root.value match {
-      case "statement" | "statements" => root.children.map(child => this.handleStatements(child, scope))
-      case "expr" | "lvalue" | "test" => this.handleExpr(root, scope)
+      case "statement" | "statements" | "IF" | "WHILE" =>
+        root.children.map(child => this.handleStatements(child, scope))
+      case "expr" | "lvalue" => root.kind = this.handleExpr(root, scope).kind
+      case "test" => this.handleTest(root, scope)
     }
 
     root
+  }
+
+  def handleTest(root: Node[String], scope: Symbol): Unit = {
+    val rhs: String = this.handleExpr(root.children.head, scope).kind
+    val lhs: String = this.handleExpr(root.children(2), scope).kind
+    val comp: String = root.children(1).value
+    if (lhs != rhs)
+      throw new Exception("Cannot compare types of " + lhs + " and " + rhs + ".")
+    comp match {
+      case ("LT" | "GT" | "LE" | "GE" | "EQ" | "NE") =>
+      case op => throw new Exception("Comparison operator " + op + " not defined.")
+    }
   }
 
   def augmentTree(root: Node[String], inScope: Symbol): Node[String] = {
@@ -664,7 +691,7 @@ object WLP4Gen {
       case "main" =>
         scope = inScope.scope
           .find(sym => sym.name == "wain").toSeq.head
-      case "expr" | "test" => return this.handleExpr(root, scope)
+      case "expr" => return this.handleExpr(root, scope)
       case "statements" => return this.handleStatements(root, scope)
       case _ => root.children.foreach(child => {
         if (child.value == "ID") this.readTerms("ID").pop()
