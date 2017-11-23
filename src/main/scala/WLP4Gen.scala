@@ -174,6 +174,7 @@ object WLP4Gen {
           this.scope.find(sym => sym.name == id).toSeq.head.kind
       }
       else if (this.name == id) this.kind
+      else if (this.broadcast(id)) symbolTable.getType(id)
       else null
     }
 
@@ -590,12 +591,12 @@ object WLP4Gen {
     exprType
   }
 
-  // TODO : Solid
   def handleExpr(root: Node[String], scope: Symbol): Node[String] = {
     root.value match {
       case "ID" =>
         val id: String = this.readTerms("ID").pop()
-        root.kind = scope.getType(id)
+        val typeInScope: String = scope.getType(id)
+        root.kind = typeInScope
         return root
       case "NUM" =>
         root.kind = "INT"
@@ -654,13 +655,15 @@ object WLP4Gen {
     root
   }
 
-  // TODO : Solid
   def augmentTree(root: Node[String], inScope: Symbol): Node[String] = {
     var scope: Symbol = inScope
     root.value match {
       case "procedure" =>
         scope = inScope.scope
           .find(sym => sym.name == this.readTerms("ID").pop()).toSeq.head
+      case "main" =>
+        scope = inScope.scope
+          .find(sym => sym.name == "wain").toSeq.head
       case "expr" | "test" => return this.handleExpr(root, scope)
       case "statements" => return this.handleStatements(root, scope)
       case _ => root.children.foreach(child => {
@@ -711,7 +714,6 @@ object WLP4Gen {
     this.readTerms = this.readTermsTemp
     this.readTerms.foreach(item => item._2.reverse())
     root = this.augmentTree(root, this.symbolTable)
-    //root.symPrint()
   }
 
   def wlp4gen(): Unit = {
@@ -724,7 +726,6 @@ object WLP4Gen {
         }
       }
       this.fillSymbolTable()
-      //this.symbolTable.print()
     } catch {
       case _: NoSuchElementException =>
       case e: Exception =>
