@@ -71,4 +71,12 @@ object MIPS {
   def jalr(op: Int): Unit = {
     this.oneOp("jalr", op)
   }
+  def num(value: Int): Int = {
+    if (value == 0) 0
+    else {
+      lis(3)
+      word(value)
+      3
+    }
+  }
 }

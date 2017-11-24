@@ -50,6 +50,10 @@ object WLP4Scan {
     def print(): Unit = {
       println(kind + " " + lexeme)
     }
+
+    def out(seq: Seq[String]): Seq[String] = {
+      seq.+:(kind + " " + lexeme)
+    }
   }
 
   class WLP4DFA extends DFA {
@@ -185,17 +189,20 @@ object WLP4Scan {
     tokens
   }
 
-  def main(args: Array[String]): Unit = {
+  def run(): Seq[String] = {
     try {
+      var output: Seq[String] = Seq.empty
       val tokenLines = io.Source.stdin.getLines.map(scan).toSeq
       for (tokenLine <- tokenLines) {
         for (token <- tokenLine) {
-          token.print()
+          output = token.out(output)
         }
       }
+      output
     } catch {
       case e:Exception =>
         System.err.println("[ERROR] " + e.getMessage)
+        null
     }
   }
 }
