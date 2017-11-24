@@ -1,22 +1,26 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <project version="4">
   <component name="BookmarkManager">
-    <bookmark url="file://$PROJECT_DIR$/src/main/scala/WLP4Gen.scala" line="420" />
-    <bookmark url="file://$PROJECT_DIR$/src/main/scala/WLP4Gen.scala" line="438" />
+    <bookmark url="file://$PROJECT_DIR$/src/main/scala/WLP4Gen.scala" line="821" />
+    <bookmark url="file://$PROJECT_DIR$/src/main/scala/WLP4Gen.scala" line="206" />
   </component>
   <component name="ChangeListManager">
     <list default="true" id="46d280f6-a3b7-4a9b-b834-c4c10aedb26d" name="Default" comment="">
-      <change type="DELETED" beforePath="$PROJECT_DIR$/target/scala-2.12/classes/WLP4Gen$.class" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/target/scala-2.12/classes/WLP4Gen$Procedure$.class" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/target/scala-2.12/classes/WLP4Gen$Procedure.class" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/target/scala-2.12/classes/WLP4Gen$Symbol.class" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/target/scala-2.12/classes/WLP4Gen$SymbolTable$.class" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/target/scala-2.12/classes/WLP4Gen.class" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/src/main/scala/MIPS.scala" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/target/scala-2.12/classes/MIPS$.class" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/target/scala-2.12/classes/MIPS.class" afterPath="" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/target/scala-2.12/classes/Gen$.class" afterPath="$PROJECT_DIR$/target/scala-2.12/classes/Gen$.class" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/target/scala-2.12/classes/Gen$Frame.class" afterPath="$PROJECT_DIR$/target/scala-2.12/classes/Gen$Frame.class" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/target/scala-2.12/classes/Gen.class" afterPath="$PROJECT_DIR$/target/scala-2.12/classes/Gen.class" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/target/scala-2.12/classes/WLP4Gen$.class" afterPath="$PROJECT_DIR$/target/scala-2.12/classes/WLP4Gen$.class" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/target/scala-2.12/classes/WLP4Gen$Procedure$.class" afterPath="$PROJECT_DIR$/target/scala-2.12/classes/WLP4Gen$Procedure$.class" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/target/scala-2.12/classes/WLP4Gen$Procedure.class" afterPath="$PROJECT_DIR$/target/scala-2.12/classes/WLP4Gen$Procedure.class" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/target/scala-2.12/classes/WLP4Gen$Symbol.class" afterPath="$PROJECT_DIR$/target/scala-2.12/classes/WLP4Gen$Symbol.class" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/target/scala-2.12/classes/WLP4Gen$SymbolTable$.class" afterPath="$PROJECT_DIR$/target/scala-2.12/classes/WLP4Gen$SymbolTable$.class" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/target/scala-2.12/classes/WLP4Gen.class" afterPath="$PROJECT_DIR$/target/scala-2.12/classes/WLP4Gen.class" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/.idea/workspace.xml" afterPath="$PROJECT_DIR$/.idea/workspace.xml" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/main/scala/Gen.scala" afterPath="$PROJECT_DIR$/src/main/scala/Gen.scala" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/main/scala/MIPS.scala" afterPath="$PROJECT_DIR$/src/main/scala/MIPS.scala" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/main/scala/WLP4Gen.scala" afterPath="$PROJECT_DIR$/src/main/scala/WLP4Gen.scala" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/main/scala/WLP4Scan.scala" afterPath="$PROJECT_DIR$/src/main/scala/WLP4Scan.scala" />
     </list>
     <ignored path="$PROJECT_DIR$/project/project/target/" />
     <ignored path="$PROJECT_DIR$/project/target/" />
@@ -35,33 +39,21 @@
   </component>
   <component name="FileEditorManager">
     <leaf SIDE_TABS_SIZE_LIMIT_KEY="450">
-      <file leaf-file-name="WLP4Gen.scala" pinned="false" current-in-tab="true">
+      <file leaf-file-name="WLP4Gen.scala" pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/src/main/scala/WLP4Gen.scala">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="760">
-              <caret line="853" column="23" lean-forward="false" selection-start-line="853" selection-start-column="23" selection-end-line="853" selection-end-column="23" />
+            <state relative-caret-position="363">
+              <caret line="867" column="52" lean-forward="false" selection-start-line="867" selection-start-column="52" selection-end-line="867" selection-end-column="52" />
               <folding />
             </state>
           </provider>
         </entry>
       </file>
-      <file leaf-file-name="Gen.scala" pinned="false" current-in-tab="false">
+      <file leaf-file-name="Gen.scala" pinned="false" current-in-tab="true">
         <entry file="file://$PROJECT_DIR$/src/main/scala/Gen.scala">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="629">
-              <caret line="46" column="0" lean-forward="false" selection-start-line="46" selection-start-column="0" selection-end-line="46" selection-end-column="0" />
-              <folding>
-                <element signature="e#0#53#0" expanded="true" />
-              </folding>
-            </state>
-          </provider>
-        </entry>
-      </file>
-      <file leaf-file-name="WLP4Scan.scala" pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/src/main/scala/WLP4Scan.scala">
-          <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="2949">
-              <caret line="198" column="9" lean-forward="true" selection-start-line="198" selection-start-column="9" selection-end-line="198" selection-end-column="9" />
+            <state relative-caret-position="346">
+              <caret line="74" column="42" lean-forward="true" selection-start-line="74" selection-start-column="42" selection-end-line="74" selection-end-column="42" />
               <folding />
             </state>
           </provider>
@@ -98,6 +90,8 @@
       <find>gentre</find>
       <find>ge</find>
       <find>rearr</find>
+      <find>proced</find>
+      <find>11</find>
     </findStrings>
     <replaceStrings>
       <replace>//System.exit(1)</replace>
@@ -124,10 +118,10 @@
         <option value="$PROJECT_DIR$/src/main/scala/StackFrame.scala" />
         <option value="$PROJECT_DIR$/src/main/scala/Frame.scala" />
         <option value="$PROJECT_DIR$/src/main/scala/Code.scala" />
-        <option value="$PROJECT_DIR$/src/main/scala/MIPS.scala" />
-        <option value="$PROJECT_DIR$/src/main/scala/Gen.scala" />
         <option value="$PROJECT_DIR$/src/main/scala/WLP4Scan.scala" />
         <option value="$PROJECT_DIR$/src/main/scala/WLP4Gen.scala" />
+        <option value="$PROJECT_DIR$/src/main/scala/MIPS.scala" />
+        <option value="$PROJECT_DIR$/src/main/scala/Gen.scala" />
       </list>
     </option>
   </component>
@@ -351,11 +345,10 @@
     <servers />
   </component>
   <component name="TimeTrackingManager">
-    <option name="totallyTimeSpent" value="135341000" />
+    <option name="totallyTimeSpent" value="139978000" />
   </component>
   <component name="ToolWindowManager">
     <frame x="-7" y="30" width="1136" height="1057" extended-state="0" />
-    <editor active="true" />
     <layout>
       <window_info id="Palette" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="13" side_tool="false" content_ui="tabs" />
       <window_info id="TODO" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="4" side_tool="false" content_ui="tabs" />
@@ -368,7 +361,7 @@
       <window_info id="Maven Projects" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="14" side_tool="false" content_ui="tabs" />
       <window_info id="Run" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.5121556" sideWeight="0.5" order="10" side_tool="false" content_ui="tabs" />
       <window_info id="Version Control" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="7" side_tool="false" content_ui="tabs" />
-      <window_info id="Terminal" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.32750243" sideWeight="0.5" order="8" side_tool="false" content_ui="tabs" />
+      <window_info id="Terminal" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.3273305" sideWeight="0.5" order="8" side_tool="false" content_ui="tabs" />
       <window_info id="Capture Tool" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="3" side_tool="false" content_ui="tabs" />
       <window_info id="Designer" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="4" side_tool="false" content_ui="tabs" />
       <window_info id="Project" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.35853133" sideWeight="0.5" order="0" side_tool="false" content_ui="combo" />
@@ -378,7 +371,7 @@
       <window_info id="Ant Build" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.25" sideWeight="0.5" order="2" side_tool="false" content_ui="tabs" />
       <window_info id="UI Designer" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="5" side_tool="false" content_ui="tabs" />
       <window_info id="Theme Preview" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="19" side_tool="false" content_ui="tabs" />
-      <window_info id="Debug" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.5169492" sideWeight="0.5" order="9" side_tool="false" content_ui="tabs" />
+      <window_info id="Debug" active="true" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" show_stripe_button="true" weight="0.40254238" sideWeight="0.5" order="9" side_tool="false" content_ui="tabs" />
       <window_info id="Favorites" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="6" side_tool="true" content_ui="tabs" />
       <window_info id="Cvs" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.25" sideWeight="0.5" order="2" side_tool="false" content_ui="tabs" />
       <window_info id="Palette" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="4" side_tool="false" content_ui="tabs" />
@@ -451,15 +444,7 @@
   </component>
   <component name="XDebuggerManager">
     <breakpoint-manager>
-      <breakpoints>
-        <line-breakpoint enabled="true" type="scala-line">
-          <url>file://$PROJECT_DIR$/src/main/scala/WLP4Gen.scala</url>
-          <line>818</line>
-          <properties />
-          <option name="timeStamp" value="373" />
-        </line-breakpoint>
-      </breakpoints>
-      <option name="time" value="374" />
+      <option name="time" value="395" />
     </breakpoint-manager>
     <watches-manager />
   </component>
@@ -581,29 +566,11 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/src/main/scala/MIPS.scala">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="807">
-          <caret line="80" column="3" lean-forward="false" selection-start-line="80" selection-start-column="3" selection-end-line="80" selection-end-column="3" />
-          <folding />
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/src/main/scala/WLP4Scan.scala">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="2949">
           <caret line="198" column="9" lean-forward="true" selection-start-line="198" selection-start-column="9" selection-end-line="198" selection-end-column="9" />
           <folding />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/src/main/scala/Gen.scala">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="629">
-          <caret line="46" column="0" lean-forward="false" selection-start-line="46" selection-start-column="0" selection-end-line="46" selection-end-column="0" />
-          <folding>
-            <element signature="e#0#53#0" expanded="true" />
-          </folding>
         </state>
       </provider>
     </entry>
@@ -633,8 +600,24 @@
     </entry>
     <entry file="file://$PROJECT_DIR$/src/main/scala/WLP4Gen.scala">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="760">
-          <caret line="853" column="23" lean-forward="false" selection-start-line="853" selection-start-column="23" selection-end-line="853" selection-end-column="23" />
+        <state relative-caret-position="363">
+          <caret line="867" column="52" lean-forward="false" selection-start-line="867" selection-start-column="52" selection-end-line="867" selection-end-column="52" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/main/scala/MIPS.scala">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="68">
+          <caret line="4" column="14" lean-forward="true" selection-start-line="4" selection-start-column="14" selection-end-line="4" selection-end-column="14" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/main/scala/Gen.scala">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="346">
+          <caret line="74" column="42" lean-forward="true" selection-start-line="74" selection-start-column="42" selection-end-line="74" selection-end-column="42" />
           <folding />
         </state>
       </provider>

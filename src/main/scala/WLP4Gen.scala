@@ -134,11 +134,15 @@ object WLP4Gen {
     }
 
     def get(name: String): Symbol = {
-      this.scope.find(sym => sym.name == name).toSeq.head
+      val temp: Seq[Symbol] = this.scope.find(sym => sym.name == name).toSeq
+      if (temp.nonEmpty) temp.head
+      else null
     }
 
     def getType(id: String): String = {
-      if (emit(id)) this.scope.find(sym => sym.name == id).toSeq.head.kind
+      if (emit(id)) {
+        this.scope.find(sym => sym.name == id).toSeq.head.kind
+      }
       else if (this.name == id) this.kind
       else null
     }
@@ -811,12 +815,21 @@ object WLP4Gen {
     newRoot
   }
 
+  // TODO : Temp value to pass read terms to code gen
+  var genStack: Map[String, Stack[String]] = Map.empty
+
   def gen(): Node[String] = {
     //this.readTerms.foreach(stack => stack._2.reverse())
     this.reArrangeOutput()
     var root: Node[String] = this.genTree("start")
     root = this.wrapArrange(root)
-    Gen.readStack = readTerms
+
+    this.readTerms.foreach(item => {
+      val newStack: Stack[String] = new Stack[String]
+      item._2.stack.reverse.foreach(item => newStack.push(item))
+      this.genStack += item._1 -> newStack
+    })
+
     this.buildSymbolTable(root, this.symbolTable)
     this.readTerms = this.readTermsTemp
     this.readTerms.foreach(item => item._2.reverse())
@@ -850,7 +863,8 @@ object WLP4Gen {
     this.parsed = this.parsed.:+("EOF EOF")
     this.parsed = this.parsed.tail.+:("BOF BOF")
     this.parsed = this.parsed.+:("start BOF procedures EOF")
-    val parseTree: Node[String] = wlp4gen(this.parsed.toIterator)
-    parseTree.symPrint()
+    var parseTree: Node[String] = wlp4gen(this.parsed.toIterator)
+    Gen.readStack = this.genStack
+    parseTree = Gen.run(parseTree, this.symbolTable)
   }
 }
