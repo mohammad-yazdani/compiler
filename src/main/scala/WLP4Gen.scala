@@ -126,9 +126,15 @@ object WLP4Gen {
     this.name = name
     this.kind = kind
 
+    var address: Int = 1
+
     def add(sym: Symbol): Unit = {
       sym.setParent(this)
       this.scope = this.scope :+ sym
+    }
+
+    def get(name: String): Symbol = {
+      this.scope.find(sym => sym.name == name).toSeq.head
     }
 
     def getType(id: String): String = {
@@ -192,6 +198,11 @@ object WLP4Gen {
       this.scope.exists(sym => sym.name == id) ||
       this.params.scope.exists(sym => sym.name == id)
     }
+
+    override def get(name: String): Symbol = {
+      val result: Symbol = super.get(name)
+      if (result == null) this.params.get(name)
+    }
   }
 
   object SymbolTable extends Symbol(null, null) {
@@ -212,8 +223,6 @@ object WLP4Gen {
         sym.print()
         System.err.println()
       })
-      /*val wain: Symbol = this.table.find(sym => sym.name == "wain").toSeq.head
-      wain.print()*/
     }
   }
 
