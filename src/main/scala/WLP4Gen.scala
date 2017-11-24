@@ -278,7 +278,7 @@ object WLP4Gen {
       } catch {
         case e: Exception =>
           System.err.print(e.getMessage)
-          System.exit(1)
+          //System.exit(1)
       }
     }
   }
@@ -397,7 +397,7 @@ object WLP4Gen {
 
   def error(): Unit = {
     System.err.println("ERROR at " + (this.haveRead - 1))
-    System.exit(1)
+    //System.exit(1)
   }
 
   def finish(): Unit = {
@@ -682,6 +682,19 @@ object WLP4Gen {
     }
   }
 
+  def handleDcls(root: Node[String], scope: Symbol): Unit = {
+    if (root.children.exists(child => child.value == "BECOMES")) {
+      val rhs: String = root.children(3).value match {
+        case "NUM" => "INT"
+        case "NULL" => "INT STAR"
+      }
+      val lhs: String = this.typeResolve(root.children(1)
+        .children.head.children.map(child => child.value))
+      if (lhs != rhs) throw new Exception("Cannot initialize " + lhs + " to " + rhs + ".")
+    }
+    else root.children.foreach(child => this.handleDcls(child, scope))
+  }
+
   def augmentTree(root: Node[String], inScope: Symbol): Node[String] = {
     var scope: Symbol = inScope
     root.value match {
@@ -691,14 +704,29 @@ object WLP4Gen {
       case "main" =>
         scope = inScope.scope
           .find(sym => sym.name == "wain").toSeq.head
-      case "expr" => return this.handleExpr(root, scope)
+        if (scope.asInstanceOf[Procedure].params.scope(1).kind != "INT")
+          throw new Exception("Second parameter to wain should be INT.")
+      case "expr" =>
+        return this.handleExpr(root, scope)
       case "statements" => return this.handleStatements(root, scope)
+      case "dcls" =>
+        this.handleDcls(root, scope)
+        root.children.foreach(child => {
+          if (child.value == "ID") this.readTerms("ID").pop()})
       case _ => root.children.foreach(child => {
         if (child.value == "ID") this.readTerms("ID").pop()
       })
     }
 
     root.children.map(child => this.augmentTree(child, scope))
+
+    if (root.children.exists(elem => elem.value == "RETURN")) {
+      val returnInx: Int = root.children.indexOf(root.children.find(elem => elem.value == "RETURN").toSeq.head)
+      val actualReturn: String = root.children(returnInx + 1).kind
+      if (scope.kind != actualReturn) throw new Exception("Function " + scope.name + " has to return type " +
+        scope.kind + " instead of " + actualReturn + ".")
+    }
+
     root
   }
 
@@ -712,7 +740,7 @@ object WLP4Gen {
     } catch {
       case e: Exception =>
         println(e.getMessage)
-        System.exit(1)
+        //System.exit(1)
     }
     try {
       while (this.unread.hasNext | this.inputCarry) {

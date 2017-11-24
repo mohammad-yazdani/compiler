@@ -7,7 +7,10 @@ object Test {
   val testFiles: Seq[String] = new File(dirName).list().toSeq
 
   def main(args: Array[String]): Unit = {
-    this.testFiles.find(file => file.endsWith(".wlp4i"))
-      .foreach(file => WLP4Gen.main(Array[String](dirName + file)))
+    val tests: Seq[String] = this.testFiles.filter(file => file.endsWith(".wlp4i"))
+    tests.foreach(file => {
+      System.err.println(file)
+      WLP4Gen.main(Array[String](dirName + file))
+    })
   }
 }
