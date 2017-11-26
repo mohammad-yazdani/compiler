@@ -1,12 +1,16 @@
 <component name="ProjectDictionaryState">
   <dictionary name="yazda">
     <words>
+      <w>addr</w>
       <w>epilog</w>
+      <w>intm</w>
       <w>jalr</w>
       <w>mfhi</w>
       <w>mflo</w>
       <w>multu</w>
       <w>prolog</w>
+      <w>runnables</w>
+      <w>vals</w>
     </words>
   </dictionary>
 </component>

@@ -1,0 +1,9 @@
+int wain(int a, int b) {
+	while (b < a) {
+		println(b);
+		b = b + 2;
+	}
+
+	println(a + b);
+	return a + b;
+}

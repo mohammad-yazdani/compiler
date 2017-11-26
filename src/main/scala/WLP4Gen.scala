@@ -415,7 +415,7 @@ object WLP4Gen {
     override def get(name: String): Symbol = {
       val result: Symbol = super.get(name)
       if (result == null) this.params.get(name)
-      else throw new Exception("Symbol " + name + " not found.")
+      else result
     }
   }
 
@@ -1028,10 +1028,10 @@ object WLP4Gen {
   var genStack: Map[String, Stack[String]] = Map.empty
 
   def gen(): Node[String] = {
-    //this.readTerms.foreach(stack => stack._2.reverse())
     this.reArrangeOutput()
     var root: Node[String] = this.genTree("start")
-    root = this.wrapArrange(root)
+
+    this.readTerms.foreach(item => {item._2.reverse()})
 
     this.readTerms.foreach(item => {
       val newStack: Stack[String] = new Stack[String]
@@ -1067,12 +1067,13 @@ object WLP4Gen {
   }
 
   def main(args: Array[String]): Unit = {
+    /* TODO : If wlp4 code is given
     this.carry = WLP4Scan.run().reverse
     wlp4parse(this.carry.toIterator)
     this.parsed = this.parsed.:+("EOF EOF")
     this.parsed = this.parsed.tail.+:("BOF BOF")
-    this.parsed = this.parsed.+:("start BOF procedures EOF")
-    var parseTree: Node[String] = wlp4gen(this.parsed.toIterator)
+    this.parsed = this.parsed.+:("start BOF procedures EOF")*/
+    var parseTree: Node[String] = wlp4gen(io.Source.stdin.getLines())
     Gen.readStack = this.genStack
     parseTree = Gen.run(parseTree, this.symbolTable)
   }
@@ -1098,22 +1099,34 @@ object WLP4Gen {
         if (unsigned) "u"
         else ""
       }
+      def comment(string: String): Unit = {
+        System.out.println("\n; " + string)
+      }
+      def inject(string: String): Unit = {
+        System.out.println(string)
+      }
       def rFormat(name: String, source: Int, op1: Int, op2: Int): Unit = {
-        println(name + " $" + source + ", $" + op1 + ", $" + op2)
+        System.out.println(name + " $" + source + ", $" + op1 + ", $" + op2)
       }
       def twoOp(name: String, op1: Int, op2: Int): Unit = {
-        println(name + " $" + op1 + ", $" + op2)
+        System.out.println(name + " $" + op1 + ", $" + op2)
       }
       def oneOp(name: String, op: Int): Unit = {
-        println(name + " $" + op)
+        System.out.println(name + " $" + op)
       }
       def iFormat(name: String, op1: Int, op2: Int, i: Int, offset: Boolean): Unit = {
-        if (offset) println(name + " $" + op1 + ", " + i + "($" + op2 + ")")
-        else println(name + " $" + op1 + ", $" + op2 + ", " + i)
+        if (offset) System.out.println(name + " $" + op1 + ", " + i + "($" + op2 + ")")
+        else System.out.println(name + " $" + op1 + ", $" + op2 + ", " + i)
       }
-
+      def iFormat(name: String, op1: Int, op2: Int, i: String, offset: Boolean): Unit = {
+        if (offset) System.out.println(name + " $" + op1 + ", " + i + "($" + op2 + ")")
+        else System.out.println(name + " $" + op1 + ", $" + op2 + ", " + i)
+      }
       def word(i: Int): Unit = {
-        println(".word " + i.toHexString)
+        System.out.println(".word " + "0x" + i.toHexString)
+      }
+      def word(string: String): Unit = {
+        System.out.println(".word " + string)
       }
       def add(source: Int, op1: Int, op2: Int): Unit = {
         this.rFormat("add", source, op1, op2)
@@ -1131,7 +1144,7 @@ object WLP4Gen {
         this.oneOp("mfhi", op)
       }
       def mflo(op: Int): Unit = {
-        this.oneOp("mfhi", op)
+        this.oneOp("mflo", op)
       }
       def lis(op: Int): Unit = {
         this.oneOp("lis", op)
@@ -1148,6 +1161,9 @@ object WLP4Gen {
       def beq(op1: Int, op2: Int, i: Int): Unit = {
         this.iFormat("beq", op1, op2, i, offset = false)
       }
+      def beq(op1: Int, op2: Int, i: String): Unit = {
+        this.iFormat("beq", op1, op2, i, offset = false)
+      }
       def bne(op1: Int, op2: Int, i: Int): Unit = {
         this.iFormat("bne", op1, op2, i, offset = false)
       }
@@ -1156,14 +1172,6 @@ object WLP4Gen {
       }
       def jalr(op: Int): Unit = {
         this.oneOp("jalr", op)
-      }
-      def num(value: Int): Int = {
-        if (value == 0) 0
-        else {
-          lis(3)
-          word(value)
-          3
-        }
       }
     }
     //##################################################################################################################
@@ -1177,6 +1185,7 @@ object WLP4Gen {
 
     var readStack: Map[String, Stack[String]] = _
 
+
     def run(root: Node[String], scope: Symbol): Node[String] = {
       root.value match {
         case "main" =>
@@ -1188,26 +1197,151 @@ object WLP4Gen {
       root
     }
 
+    val PLUS = 10
+    val MINUS = 11
+    val STAR = 12
+    val SLASH = 13
+    val PCT = 14
+    val PRINTLN = 15
+    val BECOME = 16
+    val WHILE = 17
+
+    var lastAddress: Int = 0
+    var loopCount: Int = 0
+    var labelCount: Int = 0
+
+
     class Frame(var scope: Procedure) {
       val wain: Boolean = this.scope.name == "wain"
       this.scope = scope
       val fp: Int = 29
       val sp: Int = 30
       val orgRtn: Int = 31
-      val intm1: Int = 3
-      val intm2: Int = 5
+
+      var routineStack: Stack[Routine] = new Stack[Routine]
+
+      class Routine(eval: Node[String], back: String, runnable: Int) {
+
+        val name: String = "routine" + loopCount
+        private var terminator: String = "end" + name
+        loopCount += 1
+
+        var terminatorDeclared: Boolean = false
+
+        def save(): Unit = {
+          routineStack.push(this)
+        }
+
+        def setTerminator(terminator: String): Unit = {
+          this.terminator = terminator
+          this.terminatorDeclared = true
+        }
+
+        def getTerminator: String = this.terminator
+
+        def run(): Unit = {}
+
+        def loop(): String = {
+          MIPS.inject("\n")
+          MIPS.inject(name + ":")
+          genStatements(eval.children(runnable))
+          if (back != null) MIPS.beq(0, 0, back)
+          if (!this.terminatorDeclared) MIPS.inject(terminator + ":")
+          terminator
+        }
+      }
+
+      class Test(eval: Node[String]) {
+        val name: String = "test" + labelCount
+        labelCount += 1
+
+        def run(): Unit = {
+          MIPS.comment("Making test")
+          MIPS.inject(name + ":")
+          code(eval.children.head)
+          code(eval.children(2))
+          eval.children(1).value match {
+            case "LT" => LT()
+            case "GT" => GT()
+            case "EQ" => EQ()
+            case "NE" => NE()
+            case "LE" => MIPS.add(Intm.intm1, EQ(6), LT(7, Intm.intm2))
+            case "GE" => MIPS.add(Intm.intm1, EQ(6), GT(7, Intm.intm2))
+          }
+        }
+
+        def LT(dest: Int = Intm.intm1, op: Int = Intm.five): Int = {
+          MIPS.slt(dest, op, Intm.intm1)
+          dest
+        }
+        def GT(dest: Int = Intm.intm1, op: Int = Intm.five): Int = {
+          MIPS.slt(dest, Intm.intm1, op)
+          dest
+        }
+        def EQ(dest: Int = Intm.intm1): Int = {
+          val eqResult: Int = NE(dest)
+          MIPS.sub(dest, 11, eqResult)
+          eqResult
+        }
+        def NE(dest: Int = Intm.intm1): Int = {
+          LT(6)
+          GT(7, Intm.intm2)
+          MIPS.add(dest, 6, 7)
+          dest
+        }
+      }
+
+      object Intm {
+        val intm1: Int = 3
+        val intm2: Int = 5
+
+        var oneEmpty: Boolean = true
+        var twoEmpty: Boolean = true
+
+        var addrHistory: Int = 0
+
+        def three: Int = {
+          intm1
+        }
+
+        def five: Int = {
+          MIPS.add(sp, sp, 4)
+          MIPS.lw(intm2, sp, addrHistory)
+          intm2
+        }
+
+        def getForStore: Int = {
+          if (!oneEmpty) {
+            MIPS.sw(intm1, sp, -4)
+            MIPS.sub(sp, sp, 4)
+            this.addrHistory = -4
+          }
+          oneEmpty = false
+          intm1
+        }
+      }
+
       var addrOffset: Int = 0
+      var lastAvailAddr: Int = 0
 
       def prolog(): Unit = {
+        // Importing print
+        MIPS.inject(".import print")
+        MIPS.lis(11)
+        MIPS.word(1)
+
         MIPS.sub(fp, sp, 4)
-        val elemCount: Int = (this.scope.scope.length + this.scope.params.scope.length) * 4
-        MIPS.sub(sp, sp, MIPS.num(elemCount))
+        val elemCount: Int = (this.scope.scope.length +
+          this.scope.params.scope.length) * 4
+        MIPS.comment("Making room in stack frame.")
+        MIPS.sub(sp, sp, this.num(elemCount, forFp = true))
 
         if (this.wain) {
+          MIPS.comment("Storing wain params to frame.")
           MIPS.sw(1, fp, this.scope.params.scope.head.address - addrOffset)
           MIPS.sw(2, fp, this.scope.params.scope(1).address - addrOffset)
         } else {
-          this.push(null, -1)
+          this.push(-1)
           addrOffset = -4
         }
       }
@@ -1216,6 +1350,10 @@ object WLP4Gen {
         MIPS.add(sp, fp, 4)
         if (!this.wain) MIPS.lw(orgRtn, fp, 0)
         MIPS.jr(31)
+
+        while (this.routineStack.stack.nonEmpty) {
+          this.routineStack.pop().run()
+        }
       }
 
       def body(function: Node[String]): Node[String] = {
@@ -1227,6 +1365,10 @@ object WLP4Gen {
         })
 
         this.prolog()
+
+        // TODO : Getting the params out
+        readStack("ID").pop()
+        readStack("ID").pop()
 
         this.scope.scope.map(sym => {
           sym.address = carryAddr
@@ -1241,23 +1383,255 @@ object WLP4Gen {
         function
       }
 
-      def code(root: Node[String]): Unit = {
+      def genMaterial(root: Node[String]): Seq[Int] = {
+        var resolveMaterial: Seq[Int] = Seq.empty
+        root.children.foreach(child => {
+          resolveMaterial = resolveMaterial.+:(this.code(child))
+        })
+        resolveMaterial
+      }
+
+      def code(root: Node[String]): Int = {
         root.value match {
           case "ID" =>
-            this.get(readStack("ID").pop(), intm1)
-          case "expr" | "term" | "factor" =>
-            root.children.foreach(code)
+            val id: String = readStack("ID").pop()
+            lastAddress = this.scope.get(id).address - addrOffset
+            this.get(id, Intm.three)
+          case "NUM" =>
+            this.push(readStack("NUM").pop().toInt)
+          case "PLUS" => PLUS
+          case "MINUS" => MINUS
+          case "STAR" => STAR
+          case "SLASH" => SLASH
+          case "PCT" => PCT
+          case "expr" | "term" | "factor" | "lvalue" =>
+            this.resolve(this.genMaterial(root))
+          case "statements" => this.genStatements(root)
+          case "dcls" => this.genDcls(root)
+          case "dcl" => 16
           case _ =>
+            -1
         }
       }
 
-      def push(id: String, value: Int): Unit = {
-        if (id == null && value == -1) MIPS.sw(orgRtn, fp, 0)
-        else MIPS.sw(MIPS.num(value), fp, this.scope.get(id).address - addrOffset)
+      def genDcls(root: Node[String]): Int = {
+        root.value match {
+          case "dcls" =>
+            if (root.children.isEmpty) return -1
+            var resolveMaterial: Seq[Int] = Seq.empty
+            root.children.tail.foreach(child => {
+              resolveMaterial = resolveMaterial.:+(this.genDcls(child))
+            })
+            this.resolveDcls(resolveMaterial)
+            this.genDcls(root.children.head)
+          case "dcl" => 16
+          case "NUM" => this.num(readStack("NUM").pop().toInt)
+          case "expr" => this.code(root)
+          case _ => -1
+        }
       }
 
-      def get(id: String, reg: Int): Unit = {
+      def resolveDcls(vals: Seq[Int]): Int = {
+        this.dcl(readStack("ID").pop(), Intm.intm1)
+        -1
+      }
+
+      def resolveAssignment(vals: Seq[Int]): Int = {
+        MIPS.comment("Resolving assignment")
+        MIPS.sw(Intm.intm1, fp, vals.head)
+        -1
+      }
+
+      def resolveLvalue(vals: Seq[Int]): Int = {
+        // TODO : Temp
+        vals.find(value => value < 1 ).toSeq.head
+      }
+
+      def simplifyLvalue(root: Node[String]): Int = {
+        root.value match {
+          case "ID" => this.scope.get(readStack("ID").pop()).address - addrOffset
+          case "lvalue" =>
+            var resolveMaterial: Seq[Int] = Seq.empty
+            root.children.foreach(child => {
+              resolveMaterial = resolveMaterial.:+(this.simplifyLvalue(child))
+            })
+            this.resolveLvalue(resolveMaterial)
+          case _ => 1
+        }
+      }
+
+      def genStatements(root: Node[String]): Int = {
+
+        if (root.children.nonEmpty) {
+          root.children.head.value match {
+            case "WHILE" => return this.resolveCondition(root)
+            case "IF" => return this.resolveCondition(root, isIf = true)
+            case _ =>
+          }
+        }
+
+        root.value match {
+          case "expr" => this.code(root)
+          case "lvalue" => this.simplifyLvalue(root)
+          case "PRINTLN" => PRINTLN
+          case "BECOMES" => BECOME
+          case "dcls" => genDcls(root)
+          case "WHILE" => WHILE
+          case "statement" =>
+            var resolveMaterial: Seq[Int] = Seq.empty
+            root.children.foreach(child => {
+              resolveMaterial = resolveMaterial.:+(this.genStatements(child))
+            })
+            this.resolveStatement(resolveMaterial)
+            1
+          case _ =>
+            root.children.foreach(this.genStatements)
+            -1
+        }
+      }
+
+      def resolveStatement(vals: Seq[Int]): Int = {
+        vals.head match {
+          case PRINTLN =>
+            this.resolvePrint(vals.tail)
+          case _ =>
+            if (vals.contains(BECOME)) this.resolveAssignment(vals)
+            else -1
+        }
+      }
+
+
+      def countLines(seq: Iterator[Node[String]]): Int = {
+        var count: Int = 0
+        while (seq.hasNext) {
+          val curr: Node[String] = seq.next()
+          if (curr.value == "statement") count +=1
+          count += this.countLines(curr.children.toIterator)
+        }
+        count
+      }
+
+      def resolveCondition(root: Node[String], isIf: Boolean = false): Int = {
+
+        if (isIf) {
+          val condition: Test = new Test(root.children(2))
+          val routine1: Routine = new Routine(root, null, runnable = 5)
+          val routine2: Routine = new Routine(root, null, runnable = 9)
+          routine1.setTerminator(routine2.name)
+
+          condition.run()
+          MIPS.beq(Intm.intm1, 0, routine1.getTerminator)
+          routine1.loop()
+          MIPS.beq(0, 0, routine2.getTerminator)
+          routine2.loop()
+
+        } else {
+          val condition: Test = new Test(root.children(2))
+          val loopRoutine: Routine = new Routine(root, condition.name, runnable = 5)
+
+          condition.run()
+          MIPS.beq(Intm.intm1, 0, loopRoutine.getTerminator)
+          loopRoutine.loop()
+        }
+
+        -1
+      }
+
+      def resolvePrint(vals: Seq[Int]): Int = {
+        val regWithData: Int = vals.find(value => value > 1).toSeq.head
+        MIPS.add(14, 1, 0)
+        MIPS.add(1, regWithData, 0)
+
+
+        MIPS.sw(31, sp, -4)
+        MIPS.sub(sp, sp, 4)
+
+        MIPS.lis(13)
+        MIPS.word("print")
+        MIPS.jalr(13)
+
+        //MIPS.add(sp, sp, 4)
+        MIPS.lw(31, sp, 0)
+
+        MIPS.add(1, 14, 0)
+        -1
+      }
+
+      def opResolve(lhs: Int, op: Int, rhs: Int): Int = {
+        MIPS.comment("Asking for a register to store op result in")
+        val regUsed: Int = Intm.three
+        op match {
+          case PLUS =>
+            MIPS.add(regUsed, rhs, lhs)
+          case MINUS =>
+            MIPS.sub(regUsed, rhs, lhs)
+          case STAR =>
+            MIPS.mult(rhs, lhs)
+            MIPS.mflo(regUsed)
+          case SLASH =>
+            MIPS.div(rhs, lhs)
+            MIPS.mflo(regUsed)
+          case PCT =>
+            MIPS.div(rhs, lhs)
+            MIPS.mfhi(regUsed)
+          case Intm.intm1 => Intm.intm1
+          case BECOME =>
+            MIPS.sw(rhs, fp, lhs)
+        }
+        regUsed
+      }
+
+      def resolve(vals: Seq[Int]): Int = {
+        if (vals.length == 1) vals.head
+        else if (vals.length == 2) throw new Exception("Binary operator needs two" +
+          "operands")
+        else {
+          if (vals.forall(i => i > 2))
+            this.opResolve(Intm.three, vals(1), Intm.five)
+          else vals(1)
+        }
+      }
+
+      def push(value: Int, id: String = null): Int = {
+        if (id == null && value == -1) {
+          MIPS.sw(orgRtn, fp, 0)
+          -1
+        }
+        else {
+          var address: Int = -1
+          val reg: Int = this.num(value)
+          if (id == null) {
+            this.lastAvailAddr += 4
+          }
+          else {
+            address = this.scope.get(id).address - addrOffset
+            MIPS.sw(reg, fp, address)
+          }
+          reg
+        }
+      }
+
+      def get(id: String, reg: Int): Int = {
+        if (reg == Intm.intm1) Intm.getForStore
+        MIPS.comment("Getting var " + id + " from stack into reg $" + reg + ".")
         MIPS.lw(reg, this.fp, this.scope.get(id).address - addrOffset)
+        reg
+      }
+
+      def dcl(id: String, reg: Int): Int = {
+        MIPS.comment("Declaring variable " + id + ".")
+        MIPS.sw(reg, this.fp, this.scope.get(id).address - addrOffset)
+        reg
+      }
+
+      def num(value: Int, forFp: Boolean = false): Int = {
+        MIPS.comment("Putting value " + value + " in a reg.")
+        var destReg: Int = -1
+        if (forFp) destReg = 12
+        else destReg = Intm.getForStore
+        MIPS.lis(destReg)
+        MIPS.word(value)
+        destReg
       }
     }
 
