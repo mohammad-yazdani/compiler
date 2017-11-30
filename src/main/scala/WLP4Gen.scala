@@ -1074,8 +1074,13 @@ object WLP4Gen {
     this.parsed = this.parsed.tail.+:("BOF BOF")
     this.parsed = this.parsed.+:("start BOF procedures EOF")*/
     var parseTree: Node[String] = wlp4gen(io.Source.stdin.getLines())
-    Gen.readStack = this.genStack
-    parseTree = Gen.run(parseTree, this.symbolTable)
+    //try {
+      Gen.readStack = this.genStack
+      parseTree = Gen.run(parseTree, this.symbolTable)
+    /*} catch {
+      case e: Exception =>
+        System.err.println("[ERROR] " + e.getMessage)
+    }*/
   }
 
     //##################################################################################################################
@@ -1205,8 +1210,9 @@ object WLP4Gen {
     val PRINTLN = 15
     val BECOME = 16
     val WHILE = 17
+    val AMP = 18
 
-    var lastAddress: Int = 0
+    var lastOffset: Int = 0
     var loopCount: Int = 0
     var labelCount: Int = 0
 
@@ -1395,13 +1401,15 @@ object WLP4Gen {
         root.value match {
           case "ID" =>
             val id: String = readStack("ID").pop()
-            lastAddress = this.scope.get(id).address - addrOffset
+            lastOffset = this.scope.get(id).address - addrOffset
             this.get(id, Intm.three)
           case "NUM" =>
             this.push(readStack("NUM").pop().toInt)
+          case "NULL" => 0x01
           case "PLUS" => PLUS
           case "MINUS" => MINUS
-          case "STAR" => STAR
+          case "STAR" => STAR // TODO : Consider for de-referencing
+          case "AMP" => AMP
           case "SLASH" => SLASH
           case "PCT" => PCT
           case "expr" | "term" | "factor" | "lvalue" =>
@@ -1426,6 +1434,7 @@ object WLP4Gen {
             this.genDcls(root.children.head)
           case "dcl" => 16
           case "NUM" => this.num(readStack("NUM").pop().toInt)
+          case "NULL" => 0x01
           case "expr" => this.code(root)
           case _ => -1
         }
@@ -1443,8 +1452,18 @@ object WLP4Gen {
       }
 
       def resolveLvalue(vals: Seq[Int]): Int = {
-        // TODO : Temp
-        vals.find(value => value < 1 ).toSeq.head
+        if (vals.length == 2) {
+          val result: Int = vals.head match {
+            case STAR =>
+              MIPS.comment("Assigning a value to a pointer's address.")
+              vals(1)
+            case _ => this.refResolve(vals(1), vals.head)
+          }
+          if (result == -1)
+            vals.find(value => value < 1).toSeq.head
+          else result
+        }
+        else vals.find(value => value < 1 ).toSeq.head
       }
 
       def simplifyLvalue(root: Node[String]): Int = {
@@ -1456,6 +1475,8 @@ object WLP4Gen {
               resolveMaterial = resolveMaterial.:+(this.simplifyLvalue(child))
             })
             this.resolveLvalue(resolveMaterial)
+          case "STAR" => STAR
+          case "factor" => this.code(root)
           case _ => 1
         }
       }
@@ -1581,8 +1602,22 @@ object WLP4Gen {
         regUsed
       }
 
+      def refResolve(rhs: Int, op: Int): Int = {
+        MIPS.comment("Asking for a register to store op result in")
+        val regUsed: Int = rhs
+        if (regUsed != Intm.intm1) throw new Exception("Unrecognized register " + rhs + ".")
+        op match {
+          case AMP => this.push(lastOffset, pointer = true)
+          case STAR => MIPS.lw(regUsed, regUsed, 0)
+          case 1 => return -1
+        }
+        regUsed
+      }
+
       def resolve(vals: Seq[Int]): Int = {
         if (vals.length == 1) vals.head
+        else if (vals.length == 2 && (vals.contains(AMP) || vals.contains(STAR)))
+          this.refResolve(vals.head, vals(1))
         else if (vals.length == 2) throw new Exception("Binary operator needs two" +
           "operands")
         else {
@@ -1592,7 +1627,7 @@ object WLP4Gen {
         }
       }
 
-      def push(value: Int, id: String = null): Int = {
+      def push(value: Int, id: String = null, pointer: Boolean = false): Int = {
         if (id == null && value == -1) {
           MIPS.sw(orgRtn, fp, 0)
           -1
@@ -1601,7 +1636,8 @@ object WLP4Gen {
           var address: Int = -1
           val reg: Int = this.num(value)
           if (id == null) {
-            this.lastAvailAddr += 4
+            if (pointer) MIPS.add(Intm.intm1, reg, fp)
+            else this.lastAvailAddr += 4
           }
           else {
             address = this.scope.get(id).address - addrOffset

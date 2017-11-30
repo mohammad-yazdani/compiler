@@ -1,6 +1,9 @@
 int wain(int a, int b) {
-	while(a == b) {
-		println(a);
+        if(a == b) {
+                println(a);
+        }
+	else {
+		println(b);
 	}
-	return b;
+        return b;
 }
