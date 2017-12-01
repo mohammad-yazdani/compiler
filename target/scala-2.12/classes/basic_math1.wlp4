@@ -1,0 +1,6 @@
+int wain(int a, int b) {
+	int c = 7;
+	int d = 10;
+	int e = 1;
+	return e;
+}

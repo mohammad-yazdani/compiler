@@ -1211,18 +1211,24 @@ object WLP4Gen {
     val BECOME = 16
     val WHILE = 17
     val AMP = 18
+    val NEW = 19
+    val DELETE = 20
 
     var lastOffset: Int = 0
     var loopCount: Int = 0
     var labelCount: Int = 0
 
+    var init: Boolean = false
 
     class Frame(var scope: Procedure) {
+
       val wain: Boolean = this.scope.name == "wain"
       this.scope = scope
       val fp: Int = 29
+      val fpLen: Int = 28
       val sp: Int = 30
       val orgRtn: Int = 31
+      var assignLength: Boolean = false
 
       var routineStack: Stack[Routine] = new Stack[Routine]
 
@@ -1333,14 +1339,20 @@ object WLP4Gen {
       def prolog(): Unit = {
         // Importing print
         MIPS.inject(".import print")
+        MIPS.inject(".import init")
+        MIPS.inject(".import new")
+        MIPS.inject(".import delete")
         MIPS.lis(11)
         MIPS.word(1)
 
         MIPS.sub(fp, sp, 4)
         val elemCount: Int = (this.scope.scope.length +
-          this.scope.params.scope.length) * 4
+          this.scope.params.scope.length) * 4 * 2
         MIPS.comment("Making room in stack frame.")
         MIPS.sub(sp, sp, this.num(elemCount, forFp = true))
+
+        // TODO : Set $28 to other half
+        MIPS.sub(fpLen, 29, this.num(elemCount, forFp = true))
 
         if (this.wain) {
           MIPS.comment("Storing wain params to frame.")
@@ -1412,10 +1424,12 @@ object WLP4Gen {
           case "AMP" => AMP
           case "SLASH" => SLASH
           case "PCT" => PCT
+          case "NEW" => NEW
           case "expr" | "term" | "factor" | "lvalue" =>
             this.resolve(this.genMaterial(root))
           case "statements" => this.genStatements(root)
-          case "dcls" => this.genDcls(root)
+          case "dcls" =>
+            this.genDcls(root)
           case "dcl" => 16
           case _ =>
             -1
@@ -1425,15 +1439,16 @@ object WLP4Gen {
       def genDcls(root: Node[String]): Int = {
         root.value match {
           case "dcls" =>
-            if (root.children.isEmpty) return -1
+            if (root.children.nonEmpty) this.genDcls(root.children.head)
+            else return -1
             var resolveMaterial: Seq[Int] = Seq.empty
             root.children.tail.foreach(child => {
               resolveMaterial = resolveMaterial.:+(this.genDcls(child))
             })
             this.resolveDcls(resolveMaterial)
-            this.genDcls(root.children.head)
           case "dcl" => 16
-          case "NUM" => this.num(readStack("NUM").pop().toInt)
+          case "NUM" =>
+            this.num(readStack("NUM").pop().toInt)
           case "NULL" => 0x01
           case "expr" => this.code(root)
           case _ => -1
@@ -1447,6 +1462,16 @@ object WLP4Gen {
 
       def resolveAssignment(vals: Seq[Int]): Int = {
         MIPS.comment("Resolving assignment")
+        vals.head match {
+          case 1 =>
+            MIPS.sw(Intm.intm1, Intm.five, 0)
+            return -1
+          case _ =>
+        }
+        if (assignLength) {
+          MIPS.sw(13, fpLen, vals.head)
+          this.assignLength = false
+        }
         MIPS.sw(Intm.intm1, fp, vals.head)
         -1
       }
@@ -1456,7 +1481,7 @@ object WLP4Gen {
           val result: Int = vals.head match {
             case STAR =>
               MIPS.comment("Assigning a value to a pointer's address.")
-              vals(1)
+              1 // TODO : 0 means retrieve the value on $3 and use as pointer address
             case _ => this.refResolve(vals(1), vals.head)
           }
           if (result == -1)
@@ -1468,13 +1493,16 @@ object WLP4Gen {
 
       def simplifyLvalue(root: Node[String]): Int = {
         root.value match {
-          case "ID" => this.scope.get(readStack("ID").pop()).address - addrOffset
+          case "ID" =>
+            this.scope.get(readStack("ID").pop()).address - addrOffset
           case "lvalue" =>
             var resolveMaterial: Seq[Int] = Seq.empty
             root.children.foreach(child => {
-              resolveMaterial = resolveMaterial.:+(this.simplifyLvalue(child))
+              val simplified: Int = this.simplifyLvalue(child)
+              resolveMaterial = resolveMaterial.:+(simplified)
             })
-            this.resolveLvalue(resolveMaterial)
+            val lval: Int = this.resolveLvalue(resolveMaterial)
+            lval
           case "STAR" => STAR
           case "factor" => this.code(root)
           case _ => 1
@@ -1498,6 +1526,7 @@ object WLP4Gen {
           case "BECOMES" => BECOME
           case "dcls" => genDcls(root)
           case "WHILE" => WHILE
+          case "DELETE" => DELETE
           case "statement" =>
             var resolveMaterial: Seq[Int] = Seq.empty
             root.children.foreach(child => {
@@ -1515,6 +1544,46 @@ object WLP4Gen {
         vals.head match {
           case PRINTLN =>
             this.resolvePrint(vals.tail)
+          case DELETE =>
+            // TODO : $1 is base of array
+            // TODO : Check $1 for NULL
+            // TODO : Must delete the whole array
+
+            MIPS.add(14, 1, 0)
+            MIPS.add(1, 3, 0)
+
+            MIPS.lw(13, fpLen, lastOffset)
+            MIPS.mult(13, 4)
+            MIPS.mflo(13) // TODO : $13 is the length
+
+            val whileTestLabel: String = new Test(null).name
+            val whileEndLabel: String = new Routine(null, whileTestLabel, 0).getTerminator
+            MIPS.inject(whileTestLabel + ":")
+            MIPS.slt(Intm.intm1, 1, 13)
+            MIPS.beq(13, 0, whileEndLabel)
+
+            MIPS.sw(31, sp, -4)
+            MIPS.sub(sp, sp, 4)
+
+            MIPS.lis(16)
+            MIPS.word("delete")
+
+            MIPS.jalr(16)
+
+            //MIPS.add(sp, sp, 4)
+            MIPS.lw(31, sp, 0)
+
+            MIPS.add(1, 1, 4)
+            MIPS.beq(0, 0, whileTestLabel)
+            MIPS.inject(whileEndLabel + ":")
+
+            // TODO : Setting array to NULL
+            MIPS.lis(Intm.intm1)
+            MIPS.word(0x01)
+            MIPS.sw(Intm.intm1, fp, lastOffset)
+            MIPS.add(1, 14, 0)
+
+            -1
           case _ =>
             if (vals.contains(BECOME)) this.resolveAssignment(vals)
             else -1
@@ -1614,8 +1683,54 @@ object WLP4Gen {
         regUsed
       }
 
+      def allocMem(): Int = {
+        // TODO : $3 is size of array
+        if (!init) {
+          if (this.scope.name == "wain") {
+            if (this.scope.params.scope.head.kind == "INT") {
+              MIPS.add(2, 0, 0)
+            } else {
+              // TODO : Make sure $2 is not changed
+            }
+          }
+          MIPS.sw(31, sp, -4)
+          MIPS.sub(sp, sp, 4)
+
+          MIPS.lis(16)
+          MIPS.word("init")
+          MIPS.jalr(16)
+
+          //MIPS.add(sp, sp, 4)
+          MIPS.lw(31, sp, 0)
+        }
+
+        MIPS.add(14, 1, 0)
+        MIPS.add(1, 3, 0)
+
+        MIPS.sw(31, sp, -4)
+        MIPS.sub(sp, sp, 4)
+
+        MIPS.lis(16)
+        MIPS.word("new")
+
+        MIPS.jalr(16)
+
+        //MIPS.add(sp, sp, 4)
+        MIPS.lw(31, sp, 0)
+
+        MIPS.add(13, 1, 0)
+        this.assignLength = true
+        // TODO : Later in assignment add $13 as the new array length to fpLen
+        MIPS.add(1, 14, 0)
+
+        // TODO : In $3: 0 if exhausted, otherwise head of array
+
+        Intm.intm1
+      }
+
       def resolve(vals: Seq[Int]): Int = {
         if (vals.length == 1) vals.head
+        else if (vals.reverse.head == NEW) this.allocMem()
         else if (vals.length == 2 && (vals.contains(AMP) || vals.contains(STAR)))
           this.refResolve(vals.head, vals(1))
         else if (vals.length == 2) throw new Exception("Binary operator needs two" +
