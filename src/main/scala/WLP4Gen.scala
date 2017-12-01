@@ -1267,6 +1267,8 @@ object WLP4Gen {
         val name: String = "test" + labelCount
         labelCount += 1
 
+        var pointer: Boolean = eval.children.exists(child => child.kind == "INT STAR")
+
         def run(): Unit = {
           MIPS.comment("Making test")
           MIPS.inject(name + ":")
@@ -1283,11 +1285,11 @@ object WLP4Gen {
         }
 
         def LT(dest: Int = Intm.intm1, op: Int = Intm.five): Int = {
-          MIPS.slt(dest, op, Intm.intm1)
+          MIPS.slt(dest, op, Intm.intm1, unsigned = pointer)
           dest
         }
         def GT(dest: Int = Intm.intm1, op: Int = Intm.five): Int = {
-          MIPS.slt(dest, Intm.intm1, op)
+          MIPS.slt(dest, Intm.intm1, op, unsigned = pointer)
           dest
         }
         def EQ(dest: Int = Intm.intm1): Int = {
@@ -1345,6 +1347,17 @@ object WLP4Gen {
         MIPS.lis(11)
         MIPS.word(1)
 
+        if (!init) {
+          if (this.scope.name == "wain") {
+            if (this.scope.params.scope.head.kind == "INT") {
+              MIPS.add(2, 0, 0)
+            } else {
+              // TODO : Make sure $2 is not changed
+            }
+          }
+          this.jump("init")
+        }
+
         MIPS.sub(fp, sp, 4)
         val elemCount: Int = (this.scope.scope.length +
           this.scope.params.scope.length) * 4 * 2
@@ -1365,8 +1378,19 @@ object WLP4Gen {
       }
 
       def epilog(): Unit = {
+        MIPS.lw(1, fp, this.scope.params.scope.head.address - addrOffset)
+
         MIPS.add(sp, fp, 4)
         if (!this.wain) MIPS.lw(orgRtn, fp, 0)
+
+        for (i <- 6 to 10) {
+          MIPS.add(i, 0, 0)
+        }
+
+        for (i <- 12 to 28) {
+          MIPS.add(i, 0, 0)
+        }
+
         MIPS.jr(31)
 
         while (this.routineStack.stack.nonEmpty) {
@@ -1403,8 +1427,21 @@ object WLP4Gen {
 
       def genMaterial(root: Node[String]): Seq[Int] = {
         var resolveMaterial: Seq[Int] = Seq.empty
+
+        var convertInt: Boolean = false
+
+        if (root.children.exists(child => (child.value == "PLUS") || (child.value == "MINUS")) &&
+          root.children.exists(child => child.kind == "INT STAR")) {
+          convertInt = true
+        }
+
         root.children.foreach(child => {
-          resolveMaterial = resolveMaterial.+:(this.code(child))
+          val result: Int = this.code(child)
+          resolveMaterial = resolveMaterial.+:(result)
+          if (child.kind == "INT" && convertInt) {
+            MIPS.mult(result, 4)
+            MIPS.mflo(result)
+          }
         })
         resolveMaterial
       }
@@ -1435,6 +1472,9 @@ object WLP4Gen {
             -1
         }
       }
+
+
+
 
       def genDcls(root: Node[String]): Int = {
         root.value match {
@@ -1560,18 +1600,9 @@ object WLP4Gen {
             val whileEndLabel: String = new Routine(null, whileTestLabel, 0).getTerminator
             MIPS.inject(whileTestLabel + ":")
             MIPS.slt(Intm.intm1, 1, 13)
-            MIPS.beq(13, 0, whileEndLabel)
+            MIPS.beq(3, 0, whileEndLabel)
 
-            MIPS.sw(31, sp, -4)
-            MIPS.sub(sp, sp, 4)
-
-            MIPS.lis(16)
-            MIPS.word("delete")
-
-            MIPS.jalr(16)
-
-            //MIPS.add(sp, sp, 4)
-            MIPS.lw(31, sp, 0)
+            this.jump("delete")
 
             MIPS.add(1, 1, 4)
             MIPS.beq(0, 0, whileTestLabel)
@@ -1632,16 +1663,7 @@ object WLP4Gen {
         MIPS.add(14, 1, 0)
         MIPS.add(1, regWithData, 0)
 
-
-        MIPS.sw(31, sp, -4)
-        MIPS.sub(sp, sp, 4)
-
-        MIPS.lis(13)
-        MIPS.word("print")
-        MIPS.jalr(13)
-
-        //MIPS.add(sp, sp, 4)
-        MIPS.lw(31, sp, 0)
+        this.jump("print")
 
         MIPS.add(1, 14, 0)
         -1
@@ -1676,8 +1698,13 @@ object WLP4Gen {
         val regUsed: Int = rhs
         if (regUsed != Intm.intm1) throw new Exception("Unrecognized register " + rhs + ".")
         op match {
-          case AMP => this.push(lastOffset, pointer = true)
-          case STAR => MIPS.lw(regUsed, regUsed, 0)
+          case AMP =>
+            if (lastOffset != -1) this.push(lastOffset, pointer = true)
+            else MIPS.add(3, 14, 0)
+          case STAR =>
+            lastOffset = -1
+            MIPS.add(14, regUsed, 0)
+            MIPS.lw(regUsed, regUsed, 0)
           case 1 => return -1
         }
         regUsed
@@ -1685,38 +1712,11 @@ object WLP4Gen {
 
       def allocMem(): Int = {
         // TODO : $3 is size of array
-        if (!init) {
-          if (this.scope.name == "wain") {
-            if (this.scope.params.scope.head.kind == "INT") {
-              MIPS.add(2, 0, 0)
-            } else {
-              // TODO : Make sure $2 is not changed
-            }
-          }
-          MIPS.sw(31, sp, -4)
-          MIPS.sub(sp, sp, 4)
-
-          MIPS.lis(16)
-          MIPS.word("init")
-          MIPS.jalr(16)
-
-          //MIPS.add(sp, sp, 4)
-          MIPS.lw(31, sp, 0)
-        }
 
         MIPS.add(14, 1, 0)
         MIPS.add(1, 3, 0)
 
-        MIPS.sw(31, sp, -4)
-        MIPS.sub(sp, sp, 4)
-
-        MIPS.lis(16)
-        MIPS.word("new")
-
-        MIPS.jalr(16)
-
-        //MIPS.add(sp, sp, 4)
-        MIPS.lw(31, sp, 0)
+        this.jump("new")
 
         MIPS.add(13, 1, 0)
         this.assignLength = true
@@ -1784,8 +1784,19 @@ object WLP4Gen {
         MIPS.word(value)
         destReg
       }
-    }
 
+      def jump(name: String): Unit = {
+        MIPS.sw(31, sp, -4)
+        MIPS.sub(sp, sp, 4)
+
+        MIPS.lis(16)
+        MIPS.word(name)
+        MIPS.jalr(16)
+
+        MIPS.lw(31, sp, 0)
+        MIPS.add(sp, sp, 4)
+      }
+    }
   }
 
 }

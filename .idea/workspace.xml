@@ -1,21 +1,163 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <project version="4">
   <component name="BookmarkManager">
-    <bookmark url="file://$PROJECT_DIR$/src/main/scala/WLP4Gen.scala" line="1605" />
+    <bookmark url="file://$PROJECT_DIR$/src/main/scala/WLP4Gen.scala" line="1645" />
+    <bookmark url="file://$PROJECT_DIR$/src/main/scala/WLP4Gen.scala" line="1493" />
+    <bookmark url="file://$PROJECT_DIR$/src/main/scala/WLP4Gen.scala" line="1718" />
+    <bookmark url="file://$PROJECT_DIR$/src/main/scala/WLP4Gen.scala" line="1604" />
     <bookmark url="file://$PROJECT_DIR$/src/main/scala/WLP4Gen.scala" line="1453" />
   </component>
   <component name="ChangeListManager">
     <list default="true" id="ee121c8a-14af-4cd9-a045-e1c8a5872417" name="Default" comment="">
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/.idea/dictionaries/yazda.xml" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/.idea/dictionaries/Mohammad_Yazdani.xml" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/target/scala-2.12/classes/WLP4Gen$.class" afterPath="$PROJECT_DIR$/target/scala-2.12/classes/WLP4Gen$.class" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/target/scala-2.12/classes/WLP4Gen$Gen$.class" afterPath="$PROJECT_DIR$/target/scala-2.12/classes/WLP4Gen$Gen$.class" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/target/scala-2.12/classes/WLP4Gen$Gen$Frame$Intm$.class" afterPath="$PROJECT_DIR$/target/scala-2.12/classes/WLP4Gen$Gen$Frame$Intm$.class" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/target/scala-2.12/classes/WLP4Gen$Gen$Frame$Routine.class" afterPath="$PROJECT_DIR$/target/scala-2.12/classes/WLP4Gen$Gen$Frame$Routine.class" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/target/scala-2.12/classes/WLP4Gen$Gen$Frame$Test.class" afterPath="$PROJECT_DIR$/target/scala-2.12/classes/WLP4Gen$Gen$Frame$Test.class" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/target/scala-2.12/classes/WLP4Gen$Gen$Frame.class" afterPath="$PROJECT_DIR$/target/scala-2.12/classes/WLP4Gen$Gen$Frame.class" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/target/scala-2.12/classes/WLP4Gen.class" afterPath="$PROJECT_DIR$/target/scala-2.12/classes/WLP4Gen.class" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/.idea/workspace.xml" afterPath="$PROJECT_DIR$/.idea/workspace.xml" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/main/scala/WLP4Gen.scala" afterPath="$PROJECT_DIR$/src/main/scala/WLP4Gen.scala" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/main/scala/alloc.wlp4" afterPath="$PROJECT_DIR$/src/main/scala/alloc.wlp4" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/main/scala/alloc.wlp4i" afterPath="$PROJECT_DIR$/src/main/scala/alloc.wlp4i" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/main/scala/arr.wlp4" afterPath="$PROJECT_DIR$/src/main/scala/arr.wlp4" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/main/scala/assign.wlp4" afterPath="$PROJECT_DIR$/src/main/scala/assign.wlp4" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/main/scala/assign.wlp4i" afterPath="$PROJECT_DIR$/src/main/scala/assign.wlp4i" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/main/scala/assign1.wlp4" afterPath="$PROJECT_DIR$/src/main/scala/assign1.wlp4" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/main/scala/assign1.wlp4i" afterPath="$PROJECT_DIR$/src/main/scala/assign1.wlp4i" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/main/scala/basic_math.wlp4" afterPath="$PROJECT_DIR$/src/main/scala/basic_math.wlp4" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/main/scala/basic_math1.wlp4" afterPath="$PROJECT_DIR$/src/main/scala/basic_math1.wlp4" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/main/scala/complex_pointer.wlp4" afterPath="$PROJECT_DIR$/src/main/scala/complex_pointer.wlp4" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/main/scala/complex_pointer2.wlp4" afterPath="$PROJECT_DIR$/src/main/scala/complex_pointer2.wlp4" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/main/scala/complex_pointer2.wlp4i" afterPath="$PROJECT_DIR$/src/main/scala/complex_pointer2.wlp4i" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/main/scala/complex_pointer3.wlp4" afterPath="$PROJECT_DIR$/src/main/scala/complex_pointer3.wlp4" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/main/scala/complex_pointer3.wlp4i" afterPath="$PROJECT_DIR$/src/main/scala/complex_pointer3.wlp4i" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/main/scala/complex_pointer4.wlp4" afterPath="$PROJECT_DIR$/src/main/scala/complex_pointer4.wlp4" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/main/scala/complex_pointer4.wlp4i" afterPath="$PROJECT_DIR$/src/main/scala/complex_pointer4.wlp4i" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/main/scala/complex_pointer5.wlp4" afterPath="$PROJECT_DIR$/src/main/scala/complex_pointer5.wlp4" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/main/scala/complex_pointer5.wlp4i" afterPath="$PROJECT_DIR$/src/main/scala/complex_pointer5.wlp4i" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/main/scala/eq.wlp4" afterPath="$PROJECT_DIR$/src/main/scala/eq.wlp4" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/main/scala/eq.wlp4i" afterPath="$PROJECT_DIR$/src/main/scala/eq.wlp4i" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/main/scala/ge.wlp4" afterPath="$PROJECT_DIR$/src/main/scala/ge.wlp4" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/main/scala/ge.wlp4i" afterPath="$PROJECT_DIR$/src/main/scala/ge.wlp4i" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/main/scala/gt.wlp4" afterPath="$PROJECT_DIR$/src/main/scala/gt.wlp4" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/main/scala/le.wlp4" afterPath="$PROJECT_DIR$/src/main/scala/le.wlp4" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/main/scala/le.wlp4i" afterPath="$PROJECT_DIR$/src/main/scala/le.wlp4i" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/main/scala/lt.wlp4" afterPath="$PROJECT_DIR$/src/main/scala/lt.wlp4" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/main/scala/mem.wlp4" afterPath="$PROJECT_DIR$/src/main/scala/mem.wlp4" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/main/scala/mem.wlp4i" afterPath="$PROJECT_DIR$/src/main/scala/mem.wlp4i" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/main/scala/ne.wlp4" afterPath="$PROJECT_DIR$/src/main/scala/ne.wlp4" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/main/scala/pointer.wlp4" afterPath="$PROJECT_DIR$/src/main/scala/pointer.wlp4" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/main/scala/pointer.wlp4i" afterPath="$PROJECT_DIR$/src/main/scala/pointer.wlp4i" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/main/scala/pointer1.wlp4" afterPath="$PROJECT_DIR$/src/main/scala/pointer1.wlp4" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/main/scala/pointer2.wlp4" afterPath="$PROJECT_DIR$/src/main/scala/pointer2.wlp4" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/main/scala/pointer2.wlp4i" afterPath="$PROJECT_DIR$/src/main/scala/pointer2.wlp4i" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/main/scala/pointer3.wlp4" afterPath="$PROJECT_DIR$/src/main/scala/pointer3.wlp4" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/main/scala/pointer3.wlp4i" afterPath="$PROJECT_DIR$/src/main/scala/pointer3.wlp4i" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/main/scala/print.wlp4" afterPath="$PROJECT_DIR$/src/main/scala/print.wlp4" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/main/scala/print.wlp4i" afterPath="$PROJECT_DIR$/src/main/scala/print.wlp4i" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/main/scala/public.wlp4" afterPath="$PROJECT_DIR$/src/main/scala/public.wlp4" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/main/scala/test1.wlp4" afterPath="$PROJECT_DIR$/src/main/scala/test1.wlp4" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/main/scala/test1.wlp4i" afterPath="$PROJECT_DIR$/src/main/scala/test1.wlp4i" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/main/scala/test10.wlp4" afterPath="$PROJECT_DIR$/src/main/scala/test10.wlp4" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/main/scala/test10.wlp4i" afterPath="$PROJECT_DIR$/src/main/scala/test10.wlp4i" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/main/scala/test11.wlp4" afterPath="$PROJECT_DIR$/src/main/scala/test11.wlp4" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/main/scala/test11.wlp4i" afterPath="$PROJECT_DIR$/src/main/scala/test11.wlp4i" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/main/scala/test2.wlp4" afterPath="$PROJECT_DIR$/src/main/scala/test2.wlp4" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/main/scala/test2.wlp4i" afterPath="$PROJECT_DIR$/src/main/scala/test2.wlp4i" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/main/scala/test3.wlp4" afterPath="$PROJECT_DIR$/src/main/scala/test3.wlp4" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/main/scala/test3.wlp4i" afterPath="$PROJECT_DIR$/src/main/scala/test3.wlp4i" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/main/scala/test4.wlp4" afterPath="$PROJECT_DIR$/src/main/scala/test4.wlp4" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/main/scala/test4.wlp4i" afterPath="$PROJECT_DIR$/src/main/scala/test4.wlp4i" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/main/scala/test5.wlp4" afterPath="$PROJECT_DIR$/src/main/scala/test5.wlp4" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/main/scala/test5.wlp4i" afterPath="$PROJECT_DIR$/src/main/scala/test5.wlp4i" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/main/scala/test6.wlp4" afterPath="$PROJECT_DIR$/src/main/scala/test6.wlp4" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/main/scala/test6.wlp4i" afterPath="$PROJECT_DIR$/src/main/scala/test6.wlp4i" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/main/scala/test7.wlp4" afterPath="$PROJECT_DIR$/src/main/scala/test7.wlp4" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/main/scala/test7.wlp4i" afterPath="$PROJECT_DIR$/src/main/scala/test7.wlp4i" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/main/scala/test8.wlp4" afterPath="$PROJECT_DIR$/src/main/scala/test8.wlp4" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/main/scala/test8.wlp4i" afterPath="$PROJECT_DIR$/src/main/scala/test8.wlp4i" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/main/scala/test9.wlp4" afterPath="$PROJECT_DIR$/src/main/scala/test9.wlp4" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/main/scala/test9.wlp4i" afterPath="$PROJECT_DIR$/src/main/scala/test9.wlp4i" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/main/scala/test_pointer.wlp4" afterPath="$PROJECT_DIR$/src/main/scala/test_pointer.wlp4" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/main/scala/while.wlp4" afterPath="$PROJECT_DIR$/src/main/scala/while.wlp4" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/main/scala/while.wlp4i" afterPath="$PROJECT_DIR$/src/main/scala/while.wlp4i" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/main/scala/while1.wlp4" afterPath="$PROJECT_DIR$/src/main/scala/while1.wlp4" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/main/scala/while1.wlp4i" afterPath="$PROJECT_DIR$/src/main/scala/while1.wlp4i" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/main/scala/while2.wlp4" afterPath="$PROJECT_DIR$/src/main/scala/while2.wlp4" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/main/scala/while2.wlp4i" afterPath="$PROJECT_DIR$/src/main/scala/while2.wlp4i" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/main/scala/while3.wlp4" afterPath="$PROJECT_DIR$/src/main/scala/while3.wlp4" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/main/scala/while3.wlp4i" afterPath="$PROJECT_DIR$/src/main/scala/while3.wlp4i" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/main/scala/while_nested.wlp4" afterPath="$PROJECT_DIR$/src/main/scala/while_nested.wlp4" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/target/scala-2.12/classes/alloc.wlp4" afterPath="$PROJECT_DIR$/target/scala-2.12/classes/alloc.wlp4" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/target/scala-2.12/classes/alloc.wlp4i" afterPath="$PROJECT_DIR$/target/scala-2.12/classes/alloc.wlp4i" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/target/scala-2.12/classes/arr.wlp4" afterPath="$PROJECT_DIR$/target/scala-2.12/classes/arr.wlp4" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/target/scala-2.12/classes/assign.wlp4" afterPath="$PROJECT_DIR$/target/scala-2.12/classes/assign.wlp4" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/target/scala-2.12/classes/assign.wlp4i" afterPath="$PROJECT_DIR$/target/scala-2.12/classes/assign.wlp4i" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/target/scala-2.12/classes/assign1.wlp4" afterPath="$PROJECT_DIR$/target/scala-2.12/classes/assign1.wlp4" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/target/scala-2.12/classes/assign1.wlp4i" afterPath="$PROJECT_DIR$/target/scala-2.12/classes/assign1.wlp4i" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/target/scala-2.12/classes/basic_math.wlp4" afterPath="$PROJECT_DIR$/target/scala-2.12/classes/basic_math.wlp4" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/target/scala-2.12/classes/basic_math1.wlp4" afterPath="$PROJECT_DIR$/target/scala-2.12/classes/basic_math1.wlp4" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/target/scala-2.12/classes/complex_pointer.wlp4" afterPath="$PROJECT_DIR$/target/scala-2.12/classes/complex_pointer.wlp4" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/target/scala-2.12/classes/complex_pointer2.wlp4" afterPath="$PROJECT_DIR$/target/scala-2.12/classes/complex_pointer2.wlp4" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/target/scala-2.12/classes/complex_pointer2.wlp4i" afterPath="$PROJECT_DIR$/target/scala-2.12/classes/complex_pointer2.wlp4i" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/target/scala-2.12/classes/complex_pointer3.wlp4" afterPath="$PROJECT_DIR$/target/scala-2.12/classes/complex_pointer3.wlp4" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/target/scala-2.12/classes/complex_pointer3.wlp4i" afterPath="$PROJECT_DIR$/target/scala-2.12/classes/complex_pointer3.wlp4i" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/target/scala-2.12/classes/complex_pointer4.wlp4" afterPath="$PROJECT_DIR$/target/scala-2.12/classes/complex_pointer4.wlp4" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/target/scala-2.12/classes/complex_pointer4.wlp4i" afterPath="$PROJECT_DIR$/target/scala-2.12/classes/complex_pointer4.wlp4i" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/target/scala-2.12/classes/complex_pointer5.wlp4" afterPath="$PROJECT_DIR$/target/scala-2.12/classes/complex_pointer5.wlp4" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/target/scala-2.12/classes/complex_pointer5.wlp4i" afterPath="$PROJECT_DIR$/target/scala-2.12/classes/complex_pointer5.wlp4i" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/target/scala-2.12/classes/eq.wlp4" afterPath="$PROJECT_DIR$/target/scala-2.12/classes/eq.wlp4" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/target/scala-2.12/classes/eq.wlp4i" afterPath="$PROJECT_DIR$/target/scala-2.12/classes/eq.wlp4i" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/target/scala-2.12/classes/ge.wlp4" afterPath="$PROJECT_DIR$/target/scala-2.12/classes/ge.wlp4" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/target/scala-2.12/classes/ge.wlp4i" afterPath="$PROJECT_DIR$/target/scala-2.12/classes/ge.wlp4i" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/target/scala-2.12/classes/gt.wlp4" afterPath="$PROJECT_DIR$/target/scala-2.12/classes/gt.wlp4" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/target/scala-2.12/classes/le.wlp4" afterPath="$PROJECT_DIR$/target/scala-2.12/classes/le.wlp4" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/target/scala-2.12/classes/le.wlp4i" afterPath="$PROJECT_DIR$/target/scala-2.12/classes/le.wlp4i" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/target/scala-2.12/classes/lt.wlp4" afterPath="$PROJECT_DIR$/target/scala-2.12/classes/lt.wlp4" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/target/scala-2.12/classes/mem.wlp4" afterPath="$PROJECT_DIR$/target/scala-2.12/classes/mem.wlp4" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/target/scala-2.12/classes/mem.wlp4i" afterPath="$PROJECT_DIR$/target/scala-2.12/classes/mem.wlp4i" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/target/scala-2.12/classes/ne.wlp4" afterPath="$PROJECT_DIR$/target/scala-2.12/classes/ne.wlp4" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/target/scala-2.12/classes/pointer.wlp4" afterPath="$PROJECT_DIR$/target/scala-2.12/classes/pointer.wlp4" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/target/scala-2.12/classes/pointer.wlp4i" afterPath="$PROJECT_DIR$/target/scala-2.12/classes/pointer.wlp4i" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/target/scala-2.12/classes/pointer1.wlp4" afterPath="$PROJECT_DIR$/target/scala-2.12/classes/pointer1.wlp4" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/target/scala-2.12/classes/pointer2.wlp4" afterPath="$PROJECT_DIR$/target/scala-2.12/classes/pointer2.wlp4" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/target/scala-2.12/classes/pointer2.wlp4i" afterPath="$PROJECT_DIR$/target/scala-2.12/classes/pointer2.wlp4i" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/target/scala-2.12/classes/pointer3.wlp4" afterPath="$PROJECT_DIR$/target/scala-2.12/classes/pointer3.wlp4" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/target/scala-2.12/classes/pointer3.wlp4i" afterPath="$PROJECT_DIR$/target/scala-2.12/classes/pointer3.wlp4i" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/target/scala-2.12/classes/print.wlp4" afterPath="$PROJECT_DIR$/target/scala-2.12/classes/print.wlp4" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/target/scala-2.12/classes/print.wlp4i" afterPath="$PROJECT_DIR$/target/scala-2.12/classes/print.wlp4i" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/target/scala-2.12/classes/public.wlp4" afterPath="$PROJECT_DIR$/target/scala-2.12/classes/public.wlp4" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/target/scala-2.12/classes/test1.wlp4" afterPath="$PROJECT_DIR$/target/scala-2.12/classes/test1.wlp4" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/target/scala-2.12/classes/test1.wlp4i" afterPath="$PROJECT_DIR$/target/scala-2.12/classes/test1.wlp4i" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/target/scala-2.12/classes/test10.wlp4" afterPath="$PROJECT_DIR$/target/scala-2.12/classes/test10.wlp4" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/target/scala-2.12/classes/test10.wlp4i" afterPath="$PROJECT_DIR$/target/scala-2.12/classes/test10.wlp4i" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/target/scala-2.12/classes/test11.wlp4" afterPath="$PROJECT_DIR$/target/scala-2.12/classes/test11.wlp4" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/target/scala-2.12/classes/test11.wlp4i" afterPath="$PROJECT_DIR$/target/scala-2.12/classes/test11.wlp4i" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/target/scala-2.12/classes/test2.wlp4" afterPath="$PROJECT_DIR$/target/scala-2.12/classes/test2.wlp4" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/target/scala-2.12/classes/test2.wlp4i" afterPath="$PROJECT_DIR$/target/scala-2.12/classes/test2.wlp4i" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/target/scala-2.12/classes/test3.wlp4" afterPath="$PROJECT_DIR$/target/scala-2.12/classes/test3.wlp4" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/target/scala-2.12/classes/test3.wlp4i" afterPath="$PROJECT_DIR$/target/scala-2.12/classes/test3.wlp4i" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/target/scala-2.12/classes/test4.wlp4" afterPath="$PROJECT_DIR$/target/scala-2.12/classes/test4.wlp4" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/target/scala-2.12/classes/test4.wlp4i" afterPath="$PROJECT_DIR$/target/scala-2.12/classes/test4.wlp4i" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/target/scala-2.12/classes/test5.wlp4" afterPath="$PROJECT_DIR$/target/scala-2.12/classes/test5.wlp4" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/target/scala-2.12/classes/test5.wlp4i" afterPath="$PROJECT_DIR$/target/scala-2.12/classes/test5.wlp4i" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/target/scala-2.12/classes/test6.wlp4" afterPath="$PROJECT_DIR$/target/scala-2.12/classes/test6.wlp4" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/target/scala-2.12/classes/test6.wlp4i" afterPath="$PROJECT_DIR$/target/scala-2.12/classes/test6.wlp4i" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/target/scala-2.12/classes/test7.wlp4" afterPath="$PROJECT_DIR$/target/scala-2.12/classes/test7.wlp4" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/target/scala-2.12/classes/test7.wlp4i" afterPath="$PROJECT_DIR$/target/scala-2.12/classes/test7.wlp4i" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/target/scala-2.12/classes/test8.wlp4" afterPath="$PROJECT_DIR$/target/scala-2.12/classes/test8.wlp4" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/target/scala-2.12/classes/test8.wlp4i" afterPath="$PROJECT_DIR$/target/scala-2.12/classes/test8.wlp4i" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/target/scala-2.12/classes/test9.wlp4" afterPath="$PROJECT_DIR$/target/scala-2.12/classes/test9.wlp4" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/target/scala-2.12/classes/test9.wlp4i" afterPath="$PROJECT_DIR$/target/scala-2.12/classes/test9.wlp4i" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/target/scala-2.12/classes/test_pointer.wlp4" afterPath="$PROJECT_DIR$/target/scala-2.12/classes/test_pointer.wlp4" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/target/scala-2.12/classes/while.wlp4" afterPath="$PROJECT_DIR$/target/scala-2.12/classes/while.wlp4" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/target/scala-2.12/classes/while.wlp4i" afterPath="$PROJECT_DIR$/target/scala-2.12/classes/while.wlp4i" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/target/scala-2.12/classes/while1.wlp4" afterPath="$PROJECT_DIR$/target/scala-2.12/classes/while1.wlp4" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/target/scala-2.12/classes/while1.wlp4i" afterPath="$PROJECT_DIR$/target/scala-2.12/classes/while1.wlp4i" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/target/scala-2.12/classes/while2.wlp4" afterPath="$PROJECT_DIR$/target/scala-2.12/classes/while2.wlp4" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/target/scala-2.12/classes/while2.wlp4i" afterPath="$PROJECT_DIR$/target/scala-2.12/classes/while2.wlp4i" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/target/scala-2.12/classes/while3.wlp4" afterPath="$PROJECT_DIR$/target/scala-2.12/classes/while3.wlp4" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/target/scala-2.12/classes/while3.wlp4i" afterPath="$PROJECT_DIR$/target/scala-2.12/classes/while3.wlp4i" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/target/scala-2.12/classes/while_nested.wlp4" afterPath="$PROJECT_DIR$/target/scala-2.12/classes/while_nested.wlp4" />
     </list>
     <ignored path="$PROJECT_DIR$/target/" />
     <ignored path="$PROJECT_DIR$/project/project/target/" />
@@ -37,8 +179,28 @@
       <file leaf-file-name="WLP4Gen.scala" pinned="false" current-in-tab="true">
         <entry file="file://$PROJECT_DIR$/src/main/scala/WLP4Gen.scala">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="-339">
-              <caret line="1713" column="24" lean-forward="true" selection-start-line="1713" selection-start-column="24" selection-end-line="1713" selection-end-column="24" />
+            <state relative-caret-position="374">
+              <caret line="1288" column="14" lean-forward="true" selection-start-line="1288" selection-start-column="14" selection-end-line="1288" selection-end-column="14" />
+              <folding />
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file leaf-file-name="padd.wlp4" pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/src/main/scala/padd.wlp4">
+          <provider selected="true" editor-type-id="text-editor">
+            <state relative-caret-position="68">
+              <caret line="4" column="0" lean-forward="false" selection-start-line="4" selection-start-column="0" selection-end-line="4" selection-end-column="0" />
+              <folding />
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file leaf-file-name="padd.wlp4i" pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/src/main/scala/padd.wlp4i">
+          <provider selected="true" editor-type-id="text-editor">
+            <state relative-caret-position="221">
+              <caret line="13" column="11" lean-forward="false" selection-start-line="0" selection-start-column="0" selection-end-line="99" selection-end-column="0" />
               <folding />
             </state>
           </provider>
@@ -47,8 +209,8 @@
       <file leaf-file-name="mem.wlp4" pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/src/main/scala/mem.wlp4">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="17">
-              <caret line="1" column="11" lean-forward="true" selection-start-line="1" selection-start-column="11" selection-end-line="1" selection-end-column="11" />
+            <state relative-caret-position="102">
+              <caret line="7" column="0" lean-forward="false" selection-start-line="7" selection-start-column="0" selection-end-line="7" selection-end-column="0" />
               <folding />
             </state>
           </provider>
@@ -57,8 +219,8 @@
       <file leaf-file-name="mem.wlp4i" pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/src/main/scala/mem.wlp4i">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="221">
-              <caret line="13" column="8" lean-forward="true" selection-start-line="0" selection-start-column="0" selection-end-line="64" selection-end-column="0" />
+            <state relative-caret-position="476">
+              <caret line="28" column="31" lean-forward="false" selection-start-line="0" selection-start-column="0" selection-end-line="64" selection-end-column="0" />
               <folding />
             </state>
           </provider>
@@ -88,11 +250,6 @@
   </component>
   <component name="FindInProjectRecents">
     <findStrings>
-      <find>lastAddress</find>
-      <find>this.push</find>
-      <find>refres</find>
-      <find>refresol</find>
-      <find>assignment</find>
       <find>assignm</find>
       <find>getting</find>
       <find>making</find>
@@ -103,10 +260,26 @@
       <find>routi</find>
       <find>prolo</find>
       <find>resolvepri</find>
-      <find>delete</find>
       <find>new</find>
       <find>resolvepr</find>
       <find>init</find>
+      <find>delete</find>
+      <find>fplen</find>
+      <find>e</find>
+      <find>sw</find>
+      <find>sw $1</find>
+      <find>epilo</find>
+      <find>Intm</find>
+      <find>alloc</find>
+      <find>prol</find>
+      <find>epi</find>
+      <find>amp</find>
+      <find>resolveL</find>
+      <find>refRes</find>
+      <find>0x01</find>
+      <find>asking for</find>
+      <find>refres</find>
+      <find>class Test</find>
     </findStrings>
     <replaceStrings>
       <replace>lastOffset</replace>
@@ -135,11 +308,11 @@
     <detection-done>true</detection-done>
     <sorting>DEFINITION_ORDER</sorting>
   </component>
-  <component name="ProjectFrameBounds" fullScreen="true">
-    <option name="x" value="-10" />
-    <option name="y" value="60" />
-    <option name="width" value="1828" />
-    <option name="height" value="1776" />
+  <component name="ProjectFrameBounds">
+    <option name="x" value="-7" />
+    <option name="y" value="30" />
+    <option name="width" value="1000" />
+    <option name="height" value="1057" />
   </component>
   <component name="ProjectLevelVcsManager" settingsEditedManually="true">
     <ConfirmationsSetting value="2" id="Add" />
@@ -198,6 +371,7 @@
     <property name="last_opened_file_path" value="$USER_HOME$" />
     <property name="WebServerToolWindowFactoryState" value="false" />
     <property name="aspect.path.notification.shown" value="true" />
+    <property name="SearchEverywhereHistoryKey" value="&#9;FILE&#9;file://C:/Users/Mohammad Yazdani/IdeaProjects/compiler/src/main/scala/padd.wlp4i" />
   </component>
   <component name="RunDashboard">
     <option name="ruleStates">
@@ -341,6 +515,9 @@
   <component name="ShelveChangesManager" show_recycled="false">
     <option name="remove_strategy" value="false" />
   </component>
+  <component name="SvnConfiguration">
+    <configuration />
+  </component>
   <component name="TaskManager">
     <task active="true" id="Default" summary="Default task">
       <changelist id="ee121c8a-14af-4cd9-a045-e1c8a5872417" name="Default" comment="" />
@@ -352,14 +529,15 @@
       <workItem from="1512067089378" duration="2048000" />
       <workItem from="1512077891554" duration="7789000" />
       <workItem from="1512087579819" duration="8747000" />
+      <workItem from="1512107257638" duration="13687000" />
     </task>
     <servers />
   </component>
   <component name="TimeTrackingManager">
-    <option name="totallyTimeSpent" value="27778000" />
+    <option name="totallyTimeSpent" value="41465000" />
   </component>
   <component name="ToolWindowManager">
-    <frame x="0" y="0" width="1368" height="912" extended-state="0" />
+    <frame x="-7" y="30" width="1000" height="1057" extended-state="0" />
     <editor active="true" />
     <layout>
       <window_info id="Palette" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="0" side_tool="false" content_ui="tabs" />
@@ -383,7 +561,7 @@
       <window_info id="Ant Build" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.25" sideWeight="0.5" order="9" side_tool="false" content_ui="tabs" />
       <window_info id="UI Designer" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="2" side_tool="false" content_ui="tabs" />
       <window_info id="Theme Preview" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="7" side_tool="false" content_ui="tabs" />
-      <window_info id="Debug" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" show_stripe_button="true" weight="0.4364035" sideWeight="0.5" order="11" side_tool="false" content_ui="tabs" />
+      <window_info id="Debug" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.68945634" sideWeight="0.5" order="11" side_tool="false" content_ui="tabs" />
       <window_info id="Favorites" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="2" side_tool="true" content_ui="tabs" />
       <window_info id="Cvs" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.25" sideWeight="0.5" order="7" side_tool="false" content_ui="tabs" />
       <window_info id="Message" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="4" side_tool="false" content_ui="tabs" />
@@ -415,11 +593,50 @@
         </state>
       </provider>
     </entry>
+    <entry file="file://$PROJECT_DIR$/src/main/scala/mem.wlp4">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="17">
+          <caret line="1" column="11" lean-forward="true" selection-start-line="1" selection-start-column="11" selection-end-line="1" selection-end-column="11" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/main/scala/alloc.wlp4i">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="204">
+          <caret line="12" column="11" lean-forward="false" selection-start-line="12" selection-start-column="11" selection-end-line="12" selection-end-column="11" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/main/scala/mem.wlp4i">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="221">
+          <caret line="13" column="8" lean-forward="true" selection-start-line="0" selection-start-column="0" selection-end-line="64" selection-end-column="0" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/main/scala/alloc.wlp4">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="51">
+          <caret line="3" column="13" lean-forward="false" selection-start-line="3" selection-start-column="13" selection-end-line="3" selection-end-column="13" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/main/scala/WLP4Gen.scala">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="0">
+          <caret line="0" column="0" lean-forward="false" selection-start-line="0" selection-start-column="0" selection-end-line="0" selection-end-column="0" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
     <entry file="file://$PROJECT_DIR$/src/main/scala/complex_pointer2.wlp4i">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="408">
           <caret line="24" column="30" lean-forward="true" selection-start-line="24" selection-start-column="30" selection-end-line="24" selection-end-column="30" />
-          <folding />
         </state>
       </provider>
     </entry>
@@ -427,7 +644,6 @@
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="119">
           <caret line="7" column="11" lean-forward="true" selection-start-line="0" selection-start-column="0" selection-end-line="66" selection-end-column="0" />
-          <folding />
         </state>
       </provider>
     </entry>
@@ -435,7 +651,6 @@
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="0">
           <caret line="0" column="0" lean-forward="false" selection-start-line="0" selection-start-column="0" selection-end-line="57" selection-end-column="0" />
-          <folding />
         </state>
       </provider>
     </entry>
@@ -536,7 +751,6 @@
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="0">
           <caret line="0" column="0" lean-forward="false" selection-start-line="0" selection-start-column="0" selection-end-line="57" selection-end-column="0" />
-          <folding />
         </state>
       </provider>
     </entry>
@@ -544,7 +758,6 @@
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="119">
           <caret line="7" column="11" lean-forward="false" selection-start-line="0" selection-start-column="0" selection-end-line="66" selection-end-column="0" />
-          <folding />
         </state>
       </provider>
     </entry>
@@ -552,7 +765,6 @@
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="408">
           <caret line="24" column="30" lean-forward="false" selection-start-line="24" selection-start-column="30" selection-end-line="24" selection-end-column="30" />
-          <folding />
         </state>
       </provider>
     </entry>
@@ -572,26 +784,42 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/src/main/scala/mem.wlp4i">
+    <entry file="file://$PROJECT_DIR$/src/main/scala/mem.wlp4">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="221">
-          <caret line="13" column="8" lean-forward="true" selection-start-line="0" selection-start-column="0" selection-end-line="64" selection-end-column="0" />
+        <state relative-caret-position="102">
+          <caret line="7" column="0" lean-forward="false" selection-start-line="7" selection-start-column="0" selection-end-line="7" selection-end-column="0" />
           <folding />
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/src/main/scala/mem.wlp4">
+    <entry file="file://$PROJECT_DIR$/src/main/scala/mem.wlp4i">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="17">
-          <caret line="1" column="11" lean-forward="true" selection-start-line="1" selection-start-column="11" selection-end-line="1" selection-end-column="11" />
+        <state relative-caret-position="476">
+          <caret line="28" column="31" lean-forward="false" selection-start-line="0" selection-start-column="0" selection-end-line="64" selection-end-column="0" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/main/scala/padd.wlp4">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="68">
+          <caret line="4" column="0" lean-forward="false" selection-start-line="4" selection-start-column="0" selection-end-line="4" selection-end-column="0" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/main/scala/padd.wlp4i">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="221">
+          <caret line="13" column="11" lean-forward="false" selection-start-line="0" selection-start-column="0" selection-end-line="99" selection-end-column="0" />
           <folding />
         </state>
       </provider>
     </entry>
     <entry file="file://$PROJECT_DIR$/src/main/scala/WLP4Gen.scala">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="-339">
-          <caret line="1713" column="24" lean-forward="true" selection-start-line="1713" selection-start-column="24" selection-end-line="1713" selection-end-column="24" />
+        <state relative-caret-position="374">
+          <caret line="1288" column="14" lean-forward="true" selection-start-line="1288" selection-start-column="14" selection-end-line="1288" selection-end-column="14" />
           <folding />
         </state>
       </provider>
