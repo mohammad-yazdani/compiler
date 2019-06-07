@@ -1,0 +1,1 @@
+int wain(int freddy, int albert) { println(albert); return albert; }
