@@ -1,4 +1,0 @@
-int wain (int *a, int b) {
-  *a = 23456;
-  return *a;
-}

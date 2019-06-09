@@ -2,8 +2,8 @@
 <project version="4">
   <component name="ProjectModuleManager">
     <modules>
-      <module fileurl="file://$PROJECT_DIR$/.idea/modules/compiler.iml" filepath="$PROJECT_DIR$/.idea/modules/compiler.iml" />
-      <module fileurl="file://$PROJECT_DIR$/.idea/modules/compiler-build.iml" filepath="$PROJECT_DIR$/.idea/modules/compiler-build.iml" />
+      <module fileurl="file://$PROJECT_DIR$/.idea/modules/Compiler.iml" filepath="$PROJECT_DIR$/.idea/modules/Compiler.iml" />
+      <module fileurl="file://$PROJECT_DIR$/.idea/modules/Compiler-build.iml" filepath="$PROJECT_DIR$/.idea/modules/Compiler-build.iml" />
     </modules>
   </component>
 </project>

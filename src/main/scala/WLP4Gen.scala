@@ -919,7 +919,7 @@ object WLP4Gen {
     if (lhs != rhs)
       throw new Exception("Cannot compare types of " + lhs + " and " + rhs + ".")
     comp match {
-      case ("LT" | "GT" | "LE" | "GE" | "EQ" | "NE") =>
+      case "LT" | "GT" | "LE" | "GE" | "EQ" | "NE" =>
       case op => throw new Exception("Comparison operator " + op + " not defined.")
     }
   }

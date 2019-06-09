@@ -1,6 +1,0 @@
-int wain (int *a, int b) {
-  int c = 5;
-  int d = 7;
-  int e = 8;
-  return d * b;
-}

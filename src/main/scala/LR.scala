@@ -3,7 +3,7 @@ import scala.annotation.tailrec
 object LR {
 
   /***
-    * CFGRL starter code for CS241 A7
+    * model.CFGRL starter code for CS241 A7
     * Based on cfgrl.rkt by Gordon V. Cormack
     * Created by Sean Harrap for CS241 in Winter 2017.
     */

@@ -1,8 +1,0 @@
-int wain(int *a, int b) {
-	int c = 0;
-	while(c < b) {
-		*a = c;
-		c = c + 1;
-	}
-	return *a;
-}

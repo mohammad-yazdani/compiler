@@ -1,3 +1,0 @@
-int wain(int xxx, int yyy) { 
-return (((xxx))); 
-}

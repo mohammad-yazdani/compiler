@@ -1,7 +1,0 @@
-int wain(int a, int b) {
-	while (a < 4) {
-		println(78);
-		a = a + 1;
-	}
-	return a;
-}

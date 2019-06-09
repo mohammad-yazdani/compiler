@@ -1,5 +1,0 @@
-int wain(int a, int b) {
-	int *c = NULL;
-	c = new int[a];
-	return a;
-}

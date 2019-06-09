@@ -4,7 +4,7 @@
 		module="compiler_2.12"
 		revision="0.1"
 		status="integration"
-		publication="20171130102545"
+		publication="20190609154042"
 	>
 		<description>
 		Compiler
